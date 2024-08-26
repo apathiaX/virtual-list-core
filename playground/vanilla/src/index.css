@@ -1,0 +1,16 @@
+.virt-list__container {
+  width: 500px;
+  height: 800px;
+  overflow: hidden;
+  border: 1px solid #ccc;
+}
+.virt-list__item {
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}

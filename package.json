@@ -1,0 +1,19 @@
+{
+  "name": "virtual-list",
+  "version": "0.0.1",
+  "description": "virtual list",
+  "main": "index.js",
+  "scripts": {
+    "vanilla-dev": "pnpm run -C playground/vanilla dev"
+  },
+  "keywords": [],
+  "author": "apathiaX",
+  "license": "ISC",
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "eslint": "^9.8.0",
+    "prettier": "^3.3.3",
+    "typescript": "^5.5.4",
+    "vite": "^5.3.5"
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "name": "virtual-list-apathia",
+  "version": "0.0.1",
+  "description": "virtual list",
+  "main": "index.ts",
+  "scripts": {},
+  "keywords": [],
+  "author": "apathiaX",
+  "license": "ISC",
+  "dependencies": {
+    "virtual-list-core": "workspace:^"
+  }
+}
