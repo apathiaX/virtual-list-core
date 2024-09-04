@@ -2,11 +2,13 @@
   "name": "virtual-list-vue",
   "version": "0.0.1",
   "description": "virtual list used in vue",
-  "main": "index.js",
-  "scripts": {
-    
-  },
+  "main": "index.ts",
+  "scripts": {},
   "keywords": [],
   "author": "apathiaX",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "virtual-list-core": "workspace:^",
+    "vue": "^3.4.35"
+  }
 }

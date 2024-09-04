@@ -1,11 +1,13 @@
 import { VirtualList, VirtualListEvent } from 'virtual-list-core';
 import { IVirtualListVanillaOptions } from './types';
+import { VirtualListNode } from './node';
 
 export function createVirtualLst<T extends { id: string; text: string }>(
   options: IVirtualListVanillaOptions<T>,
   // callback:
 ) {
   let virtualListIns: VirtualList<T> | null = null;
+  let virtualListNodeIns: VirtualListNode<T> | null = null;
 
   const createListClient = () => {
     if (options.clientClass) {
@@ -82,33 +84,42 @@ export function createVirtualLst<T extends { id: string; text: string }>(
     return containers[0] as HTMLElement;
   };
 
+  // const onRenderChange = (
+  //   renderRange: { renderBegin: number; renderEnd: number },
+  //   renderList: T[],
+  //   el: HTMLElement | Element | null,
+  // ) => {
+  //   _render(renderList, el);
+
+  //   if (!el?.childNodes || el?.childNodes.length === 0) {
+  //     return;
+  //   }
+
+  //   for (let i = 0; i < el.childNodes.length; i++) {
+  //     const node = el.childNodes[i] as HTMLElement;
+  //     virtualListIns!.observerEl(node);
+  //   }
+  // };
+
+  // const _render = (renderList: T[], clientEl: HTMLElement | Element | null) => {
+  //   const html = renderList
+  //     .map((item) => {
+  //       return options.customRender
+  //         ? options.customRender(item)
+  //         : `<div data-id="${item.id}" class="${options.itemClass}">${item.text}</div>`;
+  //     })
+  //     .join('');
+  //   if (clientEl) {
+  //     clientEl.innerHTML = html;
+  //   }
+  // };
+
   const onRenderChange = (
+    renderRange: { renderBegin: number; renderEnd: number },
     renderList: T[],
     el: HTMLElement | Element | null,
   ) => {
-    _render(renderList, el);
-
-    if (!el?.childNodes || el?.childNodes.length === 0) {
-      return;
-    }
-
-    for (let i = 0; i < el.childNodes.length; i++) {
-      const node = el.childNodes[i] as HTMLElement;
-      virtualListIns!.observerEl(node);
-    }
-  };
-
-  const _render = (renderList: T[], clientEl: HTMLElement | Element | null) => {
-    const html = renderList
-      .map((item) => {
-        return options.customRender
-          ? options.customRender(item)
-          : `<div data-id="${item.id}" class="${options.itemClass}">${item.text}</div>`;
-      })
-      .join('');
-    if (clientEl) {
-      clientEl.innerHTML = html;
-    }
+    virtualListNodeIns?.renderNode(renderList, renderRange);
   };
 
   const onRenderRangeUpdate = (begin: number, end: number) => {
@@ -162,7 +173,6 @@ export function createVirtualLst<T extends { id: string; text: string }>(
       {
         ...options,
         clientEl: virtualListClientEl,
-        containerEl: virtualListContainerEl!,
         bodyEl: virtualListBodyEl,
       },
       {
@@ -176,6 +186,12 @@ export function createVirtualLst<T extends { id: string; text: string }>(
         [VirtualListEvent.SCROLL_TO_BOTTOM]: onScrollToBottom,
         [VirtualListEvent.RENDER_LIST_CHANGE]: onRenderChange,
       },
+    );
+
+    virtualListNodeIns = new VirtualListNode(
+      virtualListBodyEl,
+      options,
+      virtualListIns,
     );
   };
 
