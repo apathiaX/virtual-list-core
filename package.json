@@ -4,7 +4,8 @@
   "description": "virtual list",
   "main": "index.js",
   "scripts": {
-    "vanilla-dev": "pnpm run -C playground/vanilla dev"
+    "dev:vanilla": "pnpm run -C playground/vanilla dev",
+    "dev:vue": "pnpm run -C playground/vue dev"
   },
   "keywords": [],
   "author": "apathiaX",

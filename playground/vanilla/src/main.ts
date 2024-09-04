@@ -10,6 +10,7 @@ createVirtualLst<ListItem>({
   itemClass: 'virt-list__item',
   list: getList(1000),
   itemKey: 'id',
+  buffer: 2,
   customRender: (data: ListItem) => {
     return `
       <div data-id="${data.id}" style=" border: 1px solid #fff; padding: 10px;display: flex; flex-direction: column; gap: 5px">

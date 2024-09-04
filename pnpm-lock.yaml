@@ -34,7 +34,16 @@ importers:
         specifier: workspace:^
         version: link:../core
 
-  packages/vue: {}
+  packages/vue:
+    dependencies:
+      virtual-list-core:
+        specifier: workspace:^
+        version: link:../core
+      vue:
+        specifier: ^3.4.35
+        version: 3.4.35(typescript@5.5.4)
+
+  packages/vue2: {}
 
   playground/vanilla:
     dependencies:
@@ -51,10 +60,16 @@ importers:
 
   playground/vue:
     dependencies:
+      virtual-list-vue:
+        specifier: workspace:^
+        version: link:../../packages/vue
       vue:
         specifier: ^3.4.35
         version: 3.4.35(typescript@5.5.4)
     devDependencies:
+      '@faker-js/faker':
+        specifier: ^8.4.1
+        version: 8.4.1
       '@vitejs/plugin-vue':
         specifier: ^5.1.2
         version: 5.1.2(vite@5.4.0)(vue@3.4.35)

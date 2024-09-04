@@ -1,5 +1,4 @@
 export interface IVirtualListOptions<T> {
-  containerEl?: HTMLElement;
   clientEl?: HTMLElement;
   bodyEl?: HTMLElement;
 
@@ -53,6 +52,7 @@ export enum VirtualListEvent {
   SCROLL_TO_TOP = 'scrollToTop',
   SCROLL_TO_BOTTOM = 'scrollToBottom',
   RENDER_LIST_CHANGE = 'renderListChange',
+  SIZE_CHANGE = 'sizeChange',
 }
 
 export interface IVirtualListCallBack<T> {
@@ -65,9 +65,11 @@ export interface IVirtualListCallBack<T> {
   [VirtualListEvent.SCROLL_TO_TOP]?: (firstItem: T) => void;
   [VirtualListEvent.SCROLL_TO_BOTTOM]?: (lastItem: T) => void;
   [VirtualListEvent.RENDER_LIST_CHANGE]?: (
+    renderRange: { renderBegin: number; renderEnd: number },
     renderList: T[],
     clientEl: HTMLElement | Element,
   ) => void;
+  [VirtualListEvent.SIZE_CHANGE]?: (sizes: IVirtualListChildrenSize) => void;
 }
 
 export interface IVirtualListChildrenSize {
@@ -95,7 +97,7 @@ export interface IScrollOptions {
   clientSize: number;
   listSize: number;
   scrollFrom: number;
-  scrollFn?: (distance: number) => void;
+  bgColor?: string;
   thumbClass?: string;
   trickerClass?: string;
   thumbStyle?: Record<string, string | number>;
@@ -109,7 +111,39 @@ export interface IScrollbarState {
   thumbSize: number;
 }
 
-export const SCROLL_BAR_MAP = {
+export enum ScrollbarEvent {
+  SCROLL = 'scroll',
+}
+
+export interface IScrollbarCallBack {
+  [ScrollbarEvent.SCROLL]?: (offsetRatio: number) => void;
+}
+
+export interface IScrollbarStyleKeys {
+  offset: 'offsetWidth' | 'offsetHeight';
+  scroll: 'scrollLeft' | 'scrollTop';
+  scrollSize: 'scrollWidth' | 'scrollHeight';
+  size: 'width' | 'height';
+  key: 'horizontal' | 'vertical';
+  axis: 'X' | 'Y';
+  client: 'clientX' | 'clientY';
+  direction: 'left' | 'top';
+}
+
+export interface IRenderThumbStyleParams {
+  bar: {
+    size: 'height' | 'width';
+    axis?: 'X' | 'Y';
+  };
+  size?: string;
+  move?: number;
+  direction?: 'vertical' | 'horizontal';
+}
+
+export const SCROLL_BAR_STATE_MAP: Record<
+  ScrollbarDirection,
+  IScrollbarStyleKeys
+> = {
   [ScrollbarDirection.HORIZONTAL]: {
     offset: 'offsetWidth',
     scroll: 'scrollLeft',
@@ -132,4 +166,26 @@ export const SCROLL_BAR_MAP = {
   },
 };
 
+export interface IScrollbarStyleOptions {
+  thumbClass?: string;
+  trickerClass?: string;
+  thumbStyle?: Record<string, string | number>;
+  trickerStyle?: Record<string, string | number>;
+  bgColor?: string;
+}
+
 export const SCROLLBAR_MIN_SIZE = 20;
+
+export type GenericFunction<Args extends any[] = [], R = any> = (
+  ...args: Args
+) => R;
+
+export const DEFAULT_LIST_ITEM_KEY = 'id';
+
+export enum DEFAULT_LIST_ITEM_OBSERVER_ID {
+  CLIENT = 'client',
+  HEADER = 'header',
+  FOOTER = 'footer',
+  STICKY_HEADER = 'stickyHeader',
+  STICKY_FOOTER = 'stickyFooter',
+}

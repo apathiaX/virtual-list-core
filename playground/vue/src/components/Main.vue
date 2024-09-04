@@ -1,0 +1,69 @@
+<template>
+  <div class="main">
+    <Operate :virtListRef="virtListRef" :length="list.length"></Operate>
+    <div class="demo-editable">
+      <VirtualList
+        :buffer="5"
+        ref="virtListRef"
+        :list="list"
+        itemKey="id"
+        :minSize="20"
+      >
+        <template #stickyHeader>
+          <div style="background-color: bisque; color: red">stickyHeader</div>
+        </template>
+        <template #header>
+          <div>header</div>
+        </template>
+        <template #default="{ data, index }">
+          <Item :itemData="data" :index="index" />
+        </template>
+        <template #stickyFooter>
+          <div style="background-color: bisque; color: red">stickyFooter</div>
+        </template>
+        <template #footer>
+          <div>footer</div>
+        </template>
+      </VirtualList>
+    </div>
+  </div>
+</template>
+
+<script lang="ts" setup>
+import { onMounted, ref } from 'vue';
+import { VirtualList, VirtualListIns } from 'virtual-list-vue';
+import { getList } from '../utils';
+import Item from './Item.vue';
+import Operate from './OperateGroup.vue';
+
+const list = ref<
+  {
+    index: number;
+    id: string;
+    text: string;
+  }[]
+>([]);
+
+const virtListRef = ref<VirtualListIns | null>(null);
+
+onMounted(() => {
+  // let count = 1;
+  // setInterval(() => {
+  //   if (count < 1000) {
+  //     list.value.push(...getList(1000));
+  //     count++;
+  //   }
+  // }, 1000);
+  list.value = getList(10000);
+});
+</script>
+
+<style scoped>
+.demo-editable {
+  width: 100%;
+  height: 500px;
+  background-color: var(--vp-sidebar-bg-color);
+  overflow: hidden;
+  border: 1px solid var(--vp-c-border);
+}
+</style>

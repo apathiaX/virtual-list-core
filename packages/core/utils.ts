@@ -126,6 +126,7 @@ export function handleScroll(
   }
 
   function onScroll(evt: WheelEvent) {
+    evt.stopPropagation();
     // 沿主轴方向滚动时，阻止滚轮事件的默认行为，防止触发页面滚动
     // 沿副轴方向滚动时，不阻止滚轮事件的默认行为，保持页面滚动
     const isPreventDefault = horizontal
@@ -157,4 +158,61 @@ export function handleScroll(
     attachEvents,
     detachEvents,
   };
+}
+
+export function handleScrollbarEvents(
+  thumbEl: HTMLElement,
+  eventFn: {
+    onThumbUp: (e: Event) => void;
+    onThumbMove: (e: MouseEvent | TouchEvent) => void;
+    onThumbDown: (e: MouseEvent | TouchEvent) => void;
+  },
+) {
+  let onselectstartStore: null | typeof document.onselectstart = null;
+  const { onThumbUp, onThumbMove, onThumbDown } = eventFn;
+
+  const detachEvents = () => {
+    window.removeEventListener('mousemove', onThumbMove);
+    window.removeEventListener('touchmove', onThumbMove);
+    window.removeEventListener('mouseup', onThumbUp);
+    window.removeEventListener('touchend', onThumbUp);
+
+    if (!thumbEl) return;
+
+    onselectstartStore = document.onselectstart;
+    document.onselectstart = () => false;
+
+    thumbEl.addEventListener('touchmove', onThumbMove);
+    thumbEl.addEventListener('touchend', onThumbUp);
+  };
+
+  const attachEvents = () => {
+    window.addEventListener('mousemove', onThumbMove);
+    window.addEventListener('touchmove', onThumbMove);
+    window.addEventListener('mouseup', onThumbUp);
+    window.addEventListener('touchend', onThumbUp);
+    document.onselectstart = onselectstartStore;
+    onselectstartStore = null;
+
+    if (!thumbEl) return;
+
+    thumbEl.removeEventListener('touchmove', onThumbMove);
+    thumbEl.removeEventListener('touchend', onThumbMove);
+  };
+
+  return {
+    attachEvents,
+    detachEvents,
+  };
+}
+
+export function applyStyles(
+  element: HTMLElement,
+  styles: Record<string, string | number>,
+) {
+  for (const property in styles) {
+    if (styles.hasOwnProperty(property)) {
+      element.style[property] = styles[property];
+    }
+  }
 }
