@@ -456,7 +456,6 @@ export class VirtualList<T> {
 
   /**------------------------  public methods - start --------------------- */
   scrollToOffset(targetOffset: number) {
-    // 拖动滚动条时，改成增量计算的方式
     this._abortFixOffset = true;
     let offset = targetOffset;
     if (offset < 0) {
@@ -487,6 +486,7 @@ export class VirtualList<T> {
       offset -
       this._getRangeSize(this._state.renderBegin, this._state.inViewBegin);
     this._updateVirtualSize();
+    this._updateBodyPosition();
   }
 
   scrollToIndex(index: number) {
@@ -515,6 +515,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixToIndex;
+    this._updateBodyPosition();
   }
 
   scrollIntoView(index: number) {
@@ -588,6 +589,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixTopFn;
+    this._updateBodyPosition();
   }
 
   scrollToBottom() {
@@ -606,6 +608,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixBottomFn;
+    this._updateBodyPosition();
   }
 
   observerEl(el: HTMLElement) {

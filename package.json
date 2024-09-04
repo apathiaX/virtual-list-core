@@ -5,13 +5,15 @@
   "main": "index.js",
   "scripts": {
     "dev:vanilla": "pnpm run -C playground/vanilla dev",
-    "dev:vue": "pnpm run -C playground/vue dev"
+    "dev:vue": "pnpm run -C playground/vue dev",
+    "dev:react": "pnpm run -C playground/react dev"
   },
   "keywords": [],
   "author": "apathiaX",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@types/react": "^18.3.3",
     "eslint": "^9.8.0",
     "prettier": "^3.3.3",
     "typescript": "^5.5.4",
