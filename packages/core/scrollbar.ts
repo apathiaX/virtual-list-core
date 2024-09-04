@@ -13,13 +13,13 @@ import {
 } from './types';
 
 export class Scrollbar {
-  private _thumbEl: HTMLElement;
-  private _trickerEl: HTMLElement;
-  private _state: IScrollbarState;
-  private _barState: IScrollbarStyleKeys;
-  private _direction: ScrollbarDirection;
+  private _thumbEl!: HTMLElement;
+  private _trickerEl!: HTMLElement;
+  private _state!: IScrollbarState;
+  private _barState!: IScrollbarStyleKeys;
+  private _direction!: ScrollbarDirection;
   private _totalOffset: number = 0;
-  private _styleOptions: IScrollbarStyleOptions;
+  private _styleOptions!: IScrollbarStyleOptions;
 
   private _emitEvents: IScrollbarCallBack;
   private _detachEvents: () => void;
@@ -35,9 +35,9 @@ export class Scrollbar {
     const { attachEvents, detachEvents } = handleScrollbarEvents(
       this._thumbEl,
       {
-        onThumbUp: this._onThumbUp,
-        onThumbMove: this._onThumbMove,
-        onThumbDown: this._onThumbDown,
+        onThumbUp: (e: Event) => this._onThumbUp(e),
+        onThumbMove: (e: MouseEvent | TouchEvent) => this._onThumbMove(e),
+        onThumbDown: (e: MouseEvent | TouchEvent) => this._onThumbDown(e),
       },
     );
     this._attachEvents = attachEvents;
@@ -156,7 +156,7 @@ export class Scrollbar {
     }
     const thumb = `${this._state.thumbSize}px`;
 
-    const style: Record<string, any> = this._getThumbStyle({
+    const style: Partial<CSSStyleDeclaration> = this._getThumbStyle({
       bar: {
         size: this._barState.size,
         axis: this._direction === 'horizontal' ? 'X' : 'Y',
@@ -169,7 +169,7 @@ export class Scrollbar {
     return style;
   }
 
-  private _renderTrackStyle() {
+  private _renderTrackStyle(): Partial<CSSStyleDeclaration> {
     return {
       position: 'absolute',
       width:
@@ -184,7 +184,7 @@ export class Scrollbar {
       right: '2px',
       bottom: '2px',
       borderRadius: '4px',
-      zIndex: 11,
+      zIndex: '11',
     };
   }
 
@@ -230,7 +230,6 @@ export class Scrollbar {
     const prevClickOffset = this._clickOffset;
     if (!prevClickOffset) return;
     cancelAnimationFrame(this._frameHandle as number);
-    // 移动端兼容
     let clientSize = 0;
     if (e.type === 'touchmove') {
       if ((e as TouchEvent).touches.length === 0) return;
@@ -258,7 +257,6 @@ export class Scrollbar {
   };
 
   private _onClickTrack = (e: MouseEvent) => {
-    // 点击滚动条时，thumb 中点定位到鼠标点击位置
     if (!this._trickerEl) return;
     let mousePosition =
       e[this._barState.client] -
@@ -298,5 +296,12 @@ export class Scrollbar {
   updateScrollFrom(scrollFrom: number) {
     if (this._isDragging || (!scrollFrom && scrollFrom !== 0)) return;
     this._updateOffset(scrollFrom * this._totalOffset);
+  }
+
+  destroy() {
+    this._detachEvents();
+    this._thumbEl.removeEventListener('mousedown', this._onThumbDown);
+    this._thumbEl.removeEventListener('touchstart', this._onThumbDown);
+    this._trickerEl.removeEventListener('click', this._onClickTrack);
   }
 }

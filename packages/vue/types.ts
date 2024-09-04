@@ -1,3 +1,4 @@
+import { CSSProperties } from 'vue';
 import VirtualList from './components/VirtualList.vue';
 
 export interface IVirtualListProps<T extends Record<string, any>> {
@@ -17,18 +18,27 @@ export interface IVirtualListProps<T extends Record<string, any>> {
   horizontal?: boolean;
   start?: number;
   offset?: number;
-  listStyle?: string;
+
+  listStyle?: CSSProperties;
   listClass?: string;
-  itemStyle?: string;
+  itemStyle?: CSSProperties;
   itemClass?: string;
   headerClass?: string;
-  headerStyle?: string;
+  headerStyle?: CSSProperties;
   footerClass?: string;
-  footerStyle?: string;
+  footerStyle?: CSSProperties;
   stickyHeaderClass?: string;
-  stickyHeaderStyle?: string;
+  stickyHeaderStyle?: CSSProperties;
   stickyFooterClass?: string;
-  stickyFooterStyle?: string;
+  stickyFooterStyle?: CSSProperties;
+
+  /** scrollbar style props */
+  disableScrollbar?: boolean;
+  scrollbarBgColor?: string;
+  scrollbarThumbClass?: string;
+  scrollbarTrickerClass?: string;
+  scrollbarThumbStyle?: Record<string, string | number>;
+  scrollbarTrickerStyle?: Record<string, string | number>;
 }
 
 export interface IObserverItemProps {

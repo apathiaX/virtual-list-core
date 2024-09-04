@@ -169,7 +169,7 @@ export function handleScrollbarEvents(
   },
 ) {
   let onselectstartStore: null | typeof document.onselectstart = null;
-  const { onThumbUp, onThumbMove, onThumbDown } = eventFn;
+  const { onThumbUp, onThumbMove } = eventFn;
 
   const detachEvents = () => {
     window.removeEventListener('mousemove', onThumbMove);
@@ -208,11 +208,11 @@ export function handleScrollbarEvents(
 
 export function applyStyles(
   element: HTMLElement,
-  styles: Record<string, string | number>,
+  styles: Partial<CSSStyleDeclaration>,
 ) {
   for (const property in styles) {
     if (styles.hasOwnProperty(property)) {
-      element.style[property] = styles[property];
+      element.style[property] = styles[property]!;
     }
   }
 }

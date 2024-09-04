@@ -3,10 +3,7 @@
   "version": "0.0.1",
   "description": "virtual list",
   "main": "index.ts",
-  "scripts": {
-    
-  },
-  "keywords": [],
+  "keywords": ["virtual list"],
   "author": "apathiaX",
   "license": "ISC"
 }

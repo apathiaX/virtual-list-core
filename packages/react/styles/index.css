@@ -1,0 +1,23 @@
+.virtual-list__client {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+.list-body__container {
+  height: 100%;
+  width: 100%;
+  overflow: auto hidden;
+}
+.list-body {
+  will-change: transform;
+}
+.virtual-list__sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.virtual-list__sticky-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+}

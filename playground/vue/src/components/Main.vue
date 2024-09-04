@@ -2,18 +2,14 @@
   <div class="main">
     <Operate :virtListRef="virtListRef" :length="list.length"></Operate>
     <div class="demo-editable">
-      <VirtualList
-        :buffer="5"
-        ref="virtListRef"
-        :list="list"
-        itemKey="id"
-        :minSize="20"
-      >
+      <VirtualList ref="virtListRef" :list="list" itemKey="id" :minSize="20">
         <template #stickyHeader>
           <div style="background-color: bisque; color: red">stickyHeader</div>
         </template>
         <template #header>
-          <div>header</div>
+          <div style="background-color: rgb(15, 116, 210); color: red">
+            header
+          </div>
         </template>
         <template #default="{ data, index }">
           <Item :itemData="data" :index="index" />
@@ -22,7 +18,9 @@
           <div style="background-color: bisque; color: red">stickyFooter</div>
         </template>
         <template #footer>
-          <div>footer</div>
+          <div style="background-color: rgb(11, 152, 72); color: red">
+            footer
+          </div>
         </template>
       </VirtualList>
     </div>
@@ -47,14 +45,7 @@ const list = ref<
 const virtListRef = ref<VirtualListIns | null>(null);
 
 onMounted(() => {
-  // let count = 1;
-  // setInterval(() => {
-  //   if (count < 1000) {
-  //     list.value.push(...getList(1000));
-  //     count++;
-  //   }
-  // }, 1000);
-  list.value = getList(10000);
+  list.value = getList(1000);
 });
 </script>
 

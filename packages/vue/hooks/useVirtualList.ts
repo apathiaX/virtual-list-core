@@ -7,7 +7,7 @@ import {
   watch,
 } from 'vue';
 import {
-  VirtualList,
+  BaseVirtualList,
   VirtualListEvent,
   IVirtualListChildrenSize,
 } from 'virtual-list-core';
@@ -17,11 +17,13 @@ import {
   VirtualListEmitEvents,
 } from '../types';
 
-export const useVirtualList = <T extends Record<string, any>>(
+export const useVirtualList = <
+  T extends Record<string, any> = Record<string, any>,
+>(
   props: IVirtualListProps<T>,
   emits: SetupContext<IVirtualListEmits<T>>['emit'],
 ) => {
-  const virtualListIns = ref<VirtualList<T> | null>(null);
+  const virtualListIns = ref<BaseVirtualList<T> | null>(null);
   const clientRefEl = ref<HTMLElement | null>(null);
   const listRefEl = ref<HTMLElement | null>(null);
   const headerRefEl = ref<HTMLElement | null>(null);
@@ -68,20 +70,15 @@ export const useVirtualList = <T extends Record<string, any>>(
     if (stickyFooterRefEl.value) {
       virtualListIns.value?.observerEl(stickyFooterRefEl.value);
     }
-
-    // TODO
-    // if (props.start) {
-    //   virtualListIns.value?.scrollToIndex(props.start);
-    // } else if (props.offset) {
-    //   virtualListIns.value?.scrollToOffset(props.offset);
-    // }
   };
 
   function onScrollBarScroll(ratio: number) {
     const targetOffset =
       ratio *
       (virtualListIns.value!.listTotalSize - virtualListState.clientSize);
-    virtualListIns.value?.scrollTo(targetOffset - virtualListState.offset);
+    virtualListIns.value?.scrollWithDelta(
+      targetOffset - virtualListState.offset,
+    );
   }
 
   const scrollToIndex = (index: number) => {
@@ -104,12 +101,13 @@ export const useVirtualList = <T extends Record<string, any>>(
     virtualListIns.value?.scrollIntoView(index);
   };
 
+  let isFirstCreate = true;
   watch(
     () => props.list.length,
     () => {
       if (!clientRefEl.value) return;
       virtualListIns.value?.destroy();
-      virtualListIns.value = new VirtualList<T>(
+      virtualListIns.value = new BaseVirtualList<T>(
         {
           clientEl: clientRefEl.value as HTMLElement,
           bodyEl: listRefEl.value as HTMLElement,
@@ -132,6 +130,7 @@ export const useVirtualList = <T extends Record<string, any>>(
             emits(VirtualListEmitEvents.SCROLL_TO_BOTTOM, lastItem);
           },
           [VirtualListEvent.SCROLL]: (offset: number) => {
+            virtualListState.offset = offset;
             emits(VirtualListEmitEvents.SCROLL, offset);
           },
           [VirtualListEvent.SIZE_CHANGE]: () => {
@@ -158,6 +157,15 @@ export const useVirtualList = <T extends Record<string, any>>(
         },
       );
       observerSlots();
+      if (!isFirstCreate) return;
+      setTimeout(() => {
+        isFirstCreate = false;
+        if (props.start) {
+          virtualListIns.value?.scrollToIndex(props.start);
+        } else if (props.offset) {
+          virtualListIns.value?.scrollToOffset(props.offset);
+        }
+      });
     },
     {
       immediate: true,

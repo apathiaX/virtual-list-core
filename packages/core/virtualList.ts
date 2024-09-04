@@ -1,16 +1,17 @@
 import { getDefaultState, handleScroll } from './utils';
 import {
-  type IVirtualListCallBack,
-  type IVirtualListState,
-  type IVirtualListChildrenSize,
-  type IVirtualListOptions,
-  type GenericFunction,
   VirtualListEvent,
   ScrollDirection,
   DEFAULT_LIST_ITEM_KEY,
+  DEFAULT_LIST_ITEM_OBSERVER_ID,
+  type GenericFunction,
+  type IVirtualListState,
+  type IVirtualListOptions,
+  type IVirtualListCallBack,
+  type IVirtualListChildrenSize,
 } from './types';
 
-export class VirtualList<T> {
+export class BaseVirtualList<T extends Record<string, any>> {
   private _clientEl!: HTMLElement;
   private _bodyEl!: HTMLElement;
 
@@ -44,6 +45,13 @@ export class VirtualList<T> {
     stickyFooterSize: 0,
   };
 
+  static create<T extends Record<string, any>>(
+    options: IVirtualListOptions<T>,
+    callback?: IVirtualListCallBack<T>,
+  ) {
+    return new BaseVirtualList(options, callback);
+  }
+
   constructor(
     options: IVirtualListOptions<T>,
     callback?: IVirtualListCallBack<T>,
@@ -69,7 +77,6 @@ export class VirtualList<T> {
   }
 
   _initEvent() {
-    // 初始化滚动事件
     const { detachEvents, attachEvents } = handleScroll(
       this._clientEl as HTMLElement,
       this._scroll,
@@ -86,7 +93,7 @@ export class VirtualList<T> {
     this._minSize = options.minSize || 40;
     this._state.bufferTop = options.bufferTop || options.buffer || 0;
     this._state.bufferBottom = options.bufferBottom || options.buffer || 0;
-    this._itemKey = options.itemKey || 'id';
+    this._itemKey = options.itemKey || DEFAULT_LIST_ITEM_KEY;
     this._renderControl = options.renderControl;
     this._resizeObserver = this._createObserver();
     this._calcListTotalSize();
@@ -116,6 +123,10 @@ export class VirtualList<T> {
     this._sizeMap.delete(id);
   }
 
+  // _getItemAlreadyRendered(id: string) {
+  //   return this._sizeMap.has(id);
+  // }
+
   _getItemPosByIndex(index: number) {
     if (this._fixed) {
       return {
@@ -128,10 +139,10 @@ export class VirtualList<T> {
     const { _itemKey } = this;
     let topReduce = this._childrenSize.headerSize;
     for (let i = 0; i <= index - 1; i += 1) {
-      const currentSize = this._getItemSize((this._list[i] as any)?.[_itemKey]);
+      const currentSize = this._getItemSize(this._list[i]?.[_itemKey]);
       topReduce += currentSize;
     }
-    const current = this._getItemSize((this._list[index] as any)?.[_itemKey]);
+    const current = this._getItemSize(this._list[index]?.[_itemKey]);
     return {
       top: topReduce,
       current,
@@ -143,6 +154,30 @@ export class VirtualList<T> {
     return this._state.offset > 0 ? this._state.offset : 0;
   }
 
+  _fixDynamicOffset(targetId: string, changeItemSize: number, preSize: number) {
+    const changeItemIndex = this._list.findIndex(
+      (item) => item.id === targetId,
+    );
+    if (changeItemIndex === -1 || changeItemIndex < this._state.renderBegin)
+      return;
+    let preOffset = 0;
+    for (let i = this._state.renderBegin; i < changeItemIndex; i++) {
+      preOffset += this._getItemSize(this._list[i]?.[this._itemKey]);
+    }
+    if (Math.abs(this._state.transformDistance) > preOffset) {
+      this._scroll(changeItemSize, false);
+    } else {
+    }
+    // preOffset += preSize;
+    // console.warn('xzc', 'fixed', 'third-', preOffset);
+    // const realTransformDistance =
+    //   preOffset - Math.abs(this._state.transformDistance);
+    // if (preOffset - realTransformDistance > 0) {
+    //   console.warn('xzc', 'fixed', 'fifth-');
+    //   this._scroll(changeItemSize, false);
+    // }
+  }
+
   _createObserver() {
     if (typeof ResizeObserver === 'undefined') {
       console.error('[Virtual List] ', 'ResizeObserver is not supported');
@@ -150,10 +185,14 @@ export class VirtualList<T> {
     }
     return new ResizeObserver((entries) => {
       let diff = 0;
+      // let existItemDiff = 0;
+      // let preSize = 0;
+      // let targetId = '';
       for (const entry of entries) {
         const id = (entry.target as HTMLElement).dataset.id;
         if (id) {
           const oldSize = this._getItemSize(id);
+          // const isExist = this._getItemAlreadyRendered(id);
           let newSize = 0;
           if (entry.borderBoxSize) {
             const contentBoxSize = Array.isArray(entry.borderBoxSize)
@@ -172,20 +211,25 @@ export class VirtualList<T> {
             continue;
           }
 
-          if (id === 'client') {
+          if (id === DEFAULT_LIST_ITEM_OBSERVER_ID.CLIENT) {
             this._childrenSize.clientSize = newSize;
             this._handleClientResize();
-          } else if (id === 'header') {
+          } else if (id === DEFAULT_LIST_ITEM_OBSERVER_ID.HEADER) {
             this._childrenSize.headerSize = newSize;
-          } else if (id === 'footer') {
+          } else if (id === DEFAULT_LIST_ITEM_OBSERVER_ID.FOOTER) {
             this._childrenSize.footerSize = newSize;
-          } else if (id === 'stickyHeader') {
+          } else if (id === DEFAULT_LIST_ITEM_OBSERVER_ID.STICKY_HEADER) {
             this._childrenSize.stickyHeaderSize = newSize;
-          } else if (id === 'stickyFooter') {
+          } else if (id === DEFAULT_LIST_ITEM_OBSERVER_ID.STICKY_FOOTER) {
             this._childrenSize.stickyFooterSize = newSize;
           } else if (oldSize !== newSize) {
             this._setItemSize(id, newSize);
             diff += newSize - oldSize;
+            // if (isExist) {
+            //   targetId = id;
+            //   preSize = oldSize;
+            //   existItemDiff += newSize - oldSize;
+            // }
             this._emitEvents[VirtualListEvent.UPDATE_ITEM_SIZE]?.(id, newSize);
           }
           this._emitEvents[VirtualListEvent.SIZE_CHANGE]?.(this._childrenSize);
@@ -197,6 +241,19 @@ export class VirtualList<T> {
         this._fixOffsetMethod();
       }
 
+      // if (existItemDiff !== 0) {
+      //   // console.warn(
+      //   //   'xzc',
+      //   //   'fixed',
+      //   //   'first-',
+      //   //   targetId,
+      //   //   existItemDiff,
+      //   //   preSize,
+      //   // );
+      //   // this._fixDynamicOffset(targetId, existItemDiff, preSize);
+      //   // this._scroll(existItemDiff, false);
+      //   // this.scrollToOffset(this._state.offset);
+      // } else
       if (
         (this._fixOffset || this._forceFixOffset) &&
         diff !== 0 &&
@@ -238,7 +295,7 @@ export class VirtualList<T> {
     }
     let re = 0;
     for (let i = 0; i <= this._list.length - 1; i += 1) {
-      re += this._getItemSize((this._list[i] as any)?.[this._itemKey]);
+      re += this._getItemSize(this._list[i]?.[this._itemKey]);
     }
     this._state.listTotalSize = re;
   }
@@ -246,7 +303,7 @@ export class VirtualList<T> {
   _updateVirtualSize() {
     let offset = 0;
     for (let i = 0; i < this._state.inViewBegin; i++) {
-      offset += this._getItemSize((this._list[i] as any)?.[this._itemKey]);
+      offset += this._getItemSize(this._list[i]?.[this._itemKey]);
     }
     this._state.virtualSize = offset;
   }
@@ -296,7 +353,7 @@ export class VirtualList<T> {
     const end = Math.max(range1, range2);
     let re = 0;
     for (let i = start; i < end; i += 1) {
-      re += this._getItemSize((this._list[i] as any)?.[this._itemKey]);
+      re += this._getItemSize(this._list[i]?.[this._itemKey]);
     }
     return re;
   }
@@ -343,7 +400,6 @@ export class VirtualList<T> {
     }
   }
 
-  // 结算可视区域的范围
   _calcViewRange() {
     const offsetWithNoHeader =
       this._state.offset - this._childrenSize.headerSize;
@@ -360,9 +416,7 @@ export class VirtualList<T> {
       }
 
       for (let i = start - 1; i >= 0; i -= 1) {
-        const currentSize = this._getItemSize(
-          (this._list[i] as any)?.[this._itemKey],
-        );
+        const currentSize = this._getItemSize(this._list[i]?.[this._itemKey]);
         offsetReduce -= currentSize;
         if (
           offsetReduce <= offsetWithNoHeader &&
@@ -372,7 +426,6 @@ export class VirtualList<T> {
           break;
         }
       }
-      this._fixOffset = true;
     }
 
     if (this._direction === ScrollDirection.BACKWARD) {
@@ -380,9 +433,7 @@ export class VirtualList<T> {
         return;
       }
       for (let i = start; i <= this._list.length - 1; i += 1) {
-        const currentSize = this._getItemSize(
-          (this._list[i] as any)?.[this._itemKey],
-        );
+        const currentSize = this._getItemSize(this._list[i]?.[this._itemKey]);
 
         if (
           offsetReduce <= offsetWithNoHeader &&
@@ -393,10 +444,8 @@ export class VirtualList<T> {
         }
         offsetReduce += currentSize;
       }
-      this._fixOffset = false;
     }
 
-    // 节流
     if (start !== this._state.inViewBegin) {
       this._updateRange(start);
     }
@@ -425,7 +474,7 @@ export class VirtualList<T> {
 
     this._state.renderBegin = newRenderBegin;
     this._state.renderEnd = newRenderEnd;
-    if (newRenderBegin > renderBegin) {
+    if (newRenderBegin >= oldRenderBegin) {
       this._state.virtualSize += this._getRangeSize(
         newRenderBegin,
         oldRenderBegin,
@@ -435,6 +484,7 @@ export class VirtualList<T> {
         oldRenderBegin,
         newRenderBegin,
       );
+      this._fixOffset = true;
     }
 
     this._renderList = this._list.slice(newRenderBegin, newRenderEnd + 1);
@@ -456,7 +506,6 @@ export class VirtualList<T> {
 
   /**------------------------  public methods - start --------------------- */
   scrollToOffset(targetOffset: number) {
-    // 拖动滚动条时，改成增量计算的方式
     this._abortFixOffset = true;
     let offset = targetOffset;
     if (offset < 0) {
@@ -464,13 +513,10 @@ export class VirtualList<T> {
     } else if (offset > this._getTotalSize() - this._childrenSize.clientSize) {
       offset = this._getTotalSize() - this._childrenSize.clientSize;
     }
-    // 找到当前offset小于当前 offset 的最大的index
     let index = 0;
     let offsetReduce = 0;
     for (let i = 0; i < this._list.length; i += 1) {
-      const currentSize = this._getItemSize(
-        (this._list[i] as any)?.[this._itemKey],
-      );
+      const currentSize = this._getItemSize(this._list[i]?.[this._itemKey]);
       if (offsetReduce + currentSize + this._childrenSize.headerSize > offset) {
         index = i;
         break;
@@ -479,14 +525,13 @@ export class VirtualList<T> {
     }
     this._state.offset = offset;
     this._updateRange(index);
-    // 需要计算一下 renderBegin 不然计算不准
     this._state.renderBegin = Math.max(0, index - this._state.bufferTop);
-    // 实际的滚动距离 = 目标可视区域展示的第一个元素的偏移量 + 渲染列表第一个元素到可视区域第一个元素的距离
     this._state.transformDistance =
       offsetReduce -
       offset -
       this._getRangeSize(this._state.renderBegin, this._state.inViewBegin);
     this._updateVirtualSize();
+    this._updateBodyPosition();
   }
 
   scrollToIndex(index: number) {
@@ -494,7 +539,6 @@ export class VirtualList<T> {
       return;
     }
 
-    // 如果要去的位置大于长度，那么就直接调用去底部的方法
     if (index >= this._list.length - 1) {
       this.scrollToBottom();
       return;
@@ -515,6 +559,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixToIndex;
+    this._updateBodyPosition();
   }
 
   scrollIntoView(index: number) {
@@ -588,6 +633,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixTopFn;
+    this._updateBodyPosition();
   }
 
   scrollToBottom() {
@@ -606,6 +652,7 @@ export class VirtualList<T> {
       this._fixOffsetMethod = null;
     };
     this._fixOffsetMethod = fixBottomFn;
+    this._updateBodyPosition();
   }
 
   observerEl(el: HTMLElement) {
@@ -650,7 +697,7 @@ export class VirtualList<T> {
     this._sizeMap.clear();
   }
 
-  scrollTo(delta: number) {
+  scrollWithDelta(delta: number) {
     this._scroll(delta);
   }
   /**------------------------  public methods - end --------------------- */
