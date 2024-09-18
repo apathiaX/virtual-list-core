@@ -10,7 +10,7 @@
       >
         <slot name="stickyHeader"></slot>
       </div>
-      <div class="list-body" ref="listRefEl">
+      <div class="virtual-list-body" ref="listRefEl">
         <div
           v-if="$slots.header"
           ref="headerRefEl"
@@ -23,8 +23,8 @@
         <div class="list-body__content">
           <ObserverItem
             v-for="(item, index) in renderList"
-            :key="item.id"
-            :id="item.id"
+            :key="item[itemKey]"
+            :id="item[itemKey]"
             :resizeObserver="virtualListIns?.resizeObserver"
           >
             <template #default>
@@ -55,29 +55,31 @@
         <slot name="stickyFooter"></slot>
       </div>
     </div>
-    <slot name="scrollbar">
-      <Scrollbar
-        :direction="
-          horizontal
-            ? ScrollbarDirection.HORIZONTAL
-            : ScrollbarDirection.VERTICAL
-        "
-        :clientSize="virtualListState.clientSize"
-        :listSize="
-          virtualListState.listTotalSize +
+    <Scrollbar
+      v-if="!disableScrollbar"
+      :direction="
+        horizontal ? ScrollbarDirection.HORIZONTAL : ScrollbarDirection.VERTICAL
+      "
+      :clientSize="virtualListState.clientSize"
+      :listSize="
+        virtualListState.listTotalSize +
+        virtualListState.headerSize +
+        virtualListState.footerSize
+      "
+      :scrollFrom="
+        virtualListState.offset /
+        (virtualListState.listTotalSize +
           virtualListState.headerSize +
-          virtualListState.footerSize
-        "
-        :scrollFrom="
-          virtualListState.offset /
-          (virtualListState.listTotalSize +
-            virtualListState.headerSize +
-            virtualListState.footerSize -
-            virtualListState.clientSize)
-        "
-        :onScroll="onScrollBarScroll"
-      ></Scrollbar>
-    </slot>
+          virtualListState.footerSize -
+          virtualListState.clientSize)
+      "
+      :onScroll="onScrollBarScroll"
+      :bgColor="scrollbarBgColor"
+      :thumbClass="scrollbarThumbClass"
+      :trickerClass="scrollbarTrickerClass"
+      :thumbStyle="scrollbarThumbStyle"
+      :trickerStyle="scrollbarTrickerStyle"
+    ></Scrollbar>
   </div>
 </template>
 
@@ -88,7 +90,12 @@ import Scrollbar from './Scrollbar.vue';
 import { useVirtualList } from '../hooks/useVirtualList';
 import { IVirtualListProps, VirtualListEmitEvents } from '../types';
 
-const props = defineProps<IVirtualListProps<Record<string, any>>>();
+const props = withDefaults(
+  defineProps<IVirtualListProps<Record<string, any>>>(),
+  {
+    itemKey: 'id',
+  },
+);
 const emits = defineEmits<{
   (e: VirtualListEmitEvents.SCROLL, offset: number): void;
   (
@@ -125,16 +132,18 @@ defineExpose<{
   scrollToTop: () => void;
   scrollToBottom: () => void;
   scrollIntoView: (index: number) => void;
+  virtualListIns: typeof virtualListIns;
 }>({
   scrollToIndex,
   scrollToOffset,
   scrollToTop,
   scrollIntoView,
   scrollToBottom,
+  virtualListIns,
 });
 </script>
 
-<style>
+<style scoped>
 .virtual-list__client {
   width: 100%;
   height: 100%;
@@ -145,7 +154,7 @@ defineExpose<{
   width: 100%;
   overflow: auto hidden;
 }
-.list-body {
+.virtual-list-body {
   will-change: transform;
 }
 .virtual-list__sticky-header {

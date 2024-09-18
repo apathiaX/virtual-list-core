@@ -2,7 +2,7 @@
   "name": "virtual-list-vue2",
   "version": "0.0.1",
   "description": "virtual list used in vue2",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     
   },

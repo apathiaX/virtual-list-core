@@ -45,13 +45,6 @@ const list = ref<
 const virtListRef = ref<VirtualListIns | null>(null);
 
 onMounted(() => {
-  // let count = 1;
-  // setInterval(() => {
-  //   if (count < 20) {
-  //     list.value.push(...getList(5000));
-  //     count++;
-  //   }
-  // }, 1000);
   list.value = getList(1000);
 });
 </script>

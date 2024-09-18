@@ -1,7 +1,10 @@
-import { CSSProperties } from 'vue';
+import Vue from 'vue';
+import { BaseVirtualList, ScrollbarDirection } from 'virtual-list-core';
 import VirtualList from './components/VirtualList.vue';
 
-export interface IVirtualListProps<T extends Record<string, any>> {
+export interface IVirtualListProps<
+  T extends Record<string, any> = Record<string, any>,
+> {
   list: T[];
   itemKey: string;
   minSize: number;
@@ -19,18 +22,18 @@ export interface IVirtualListProps<T extends Record<string, any>> {
   start?: number;
   offset?: number;
 
-  listStyle?: CSSProperties;
+  listStyle?: CSSStyleDeclaration;
   listClass?: string;
-  itemStyle?: CSSProperties;
+  itemStyle?: CSSStyleDeclaration;
   itemClass?: string;
   headerClass?: string;
-  headerStyle?: CSSProperties;
+  headerStyle?: CSSStyleDeclaration;
   footerClass?: string;
-  footerStyle?: CSSProperties;
+  footerStyle?: CSSStyleDeclaration;
   stickyHeaderClass?: string;
-  stickyHeaderStyle?: CSSProperties;
+  stickyHeaderStyle?: CSSStyleDeclaration;
   stickyFooterClass?: string;
-  stickyFooterStyle?: CSSProperties;
+  stickyFooterStyle?: CSSStyleDeclaration;
 
   /** scrollbar style props */
   disableScrollbar?: boolean;
@@ -59,3 +62,36 @@ export interface IVirtualListEmits<T> {
 }
 
 export type VirtualListIns = InstanceType<typeof VirtualList>;
+
+declare module 'vue' {
+  export interface VirtualList<V extends Vue> {
+    props?: IVirtualListProps;
+    data?(this: V): {
+      virtualListIns: BaseVirtualList<Record<string, any>> | null;
+      renderList: Record<string, any>[];
+      virtualListState: {
+        headerSize: number;
+        footerSize: number;
+        stickyHeaderSize: number;
+        stickyFooterSize: number;
+        clientSize: number;
+        listTotalSize: number;
+        offset: number;
+      };
+      ScrollbarDirection: typeof ScrollbarDirection;
+    };
+    methods?: {
+      onRenderListChange: (renderRange: {
+        renderBegin: number;
+        renderEnd: number;
+      }) => void;
+      onScrollBarScroll: (ratio: number) => void;
+    };
+    computed?: {
+      listLength: () => number;
+      renderBegin: () => number;
+      resizeObserver: () => ResizeObserver;
+    };
+    mounted?(): void;
+  }
+}

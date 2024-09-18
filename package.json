@@ -6,7 +6,8 @@
   "scripts": {
     "dev:vanilla": "pnpm run -C playground/vanilla dev",
     "dev:vue": "pnpm run -C playground/vue dev",
-    "dev:react": "pnpm run -C playground/react dev"
+    "dev:react": "pnpm run -C playground/react dev",
+    "dev:vue2": "pnpm run -C playground/vue2 dev"
   },
   "keywords": [],
   "author": "apathiaX",

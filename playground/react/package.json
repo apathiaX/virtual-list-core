@@ -12,7 +12,7 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "virtual-list-vue": "workspace:^"
+    "virtual-list-react": "workspace:^"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -25,6 +25,7 @@
     "globals": "^15.9.0",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "@faker-js/faker": "^8.4.1"
   }
 }

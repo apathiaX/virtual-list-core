@@ -19,20 +19,13 @@ export interface IVirtualListOptions<T> {
 export interface IVirtualListState {
   views: number;
 
-  // 滚动距离
   offset: number;
-  // 不包含插槽的高度
   listTotalSize: number;
-  // 虚拟占位尺寸，是从0到renderBegin的尺寸
   virtualSize: number;
-  // 可视区的起始下标
   inViewBegin: number;
-  // 可视区的结束下标
   inViewEnd: number;
 
-  // buffer的起始下标
   renderBegin: number;
-  // buffer的结束下标
   renderEnd: number;
 
   bufferTop: number;

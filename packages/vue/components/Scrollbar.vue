@@ -1,11 +1,19 @@
 <template>
-  <div class="scrollbar-container" ref="trickRef">
-    <div class="scrollbar-item" ref="thumbRef"></div>
+  <div
+    :class="`scrollbar-container ${trickerClass}`"
+    :style="trickerStyle"
+    ref="trickRef"
+  >
+    <div
+      :class="`scrollbar-item ${thumbClass}`"
+      :style="thumbStyle"
+      ref="thumbRef"
+    ></div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import {
   Scrollbar,
   ScrollbarEvent,
@@ -42,15 +50,15 @@ watch(
 
 watch(
   () => props.listSize,
-  () => {
-    scrollbarIns.value?.updateListSize(props.listSize);
+  (newSize) => {
+    scrollbarIns.value?.updateListSize(newSize);
   },
 );
 
 watch(
   () => props.scrollFrom,
-  () => {
-    scrollbarIns.value?.updateScrollFrom(props.scrollFrom);
+  (newSize) => {
+    scrollbarIns.value?.updateScrollFrom(newSize);
   },
 );
 
@@ -74,6 +82,12 @@ onMounted(() => {
         emits('scroll', offsetRatio),
     },
   );
+});
+
+onBeforeUnmount(() => {
+  if (scrollbarIns.value) {
+    scrollbarIns.value.destroy();
+  }
 });
 </script>
 <style scoped>
