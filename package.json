@@ -22,9 +22,12 @@
   "license": "ISC",
   "devDependencies": {
     "@changesets/cli": "^2.27.8",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
     "@eslint/js": "^9.9.0",
     "@faker-js/faker": "^8.4.1",
     "@types/react": "^18.3.3",
+    "commitizen": "^4.3.0",
     "eslint": "^9.8.0",
     "eslint-plugin-react": "^7.36.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
