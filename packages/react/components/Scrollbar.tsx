@@ -48,7 +48,17 @@ export const VirtualScrollbar = (props: IScrollbarProps) => {
         scrollbarIns.current = null;
       }
     };
-  }, []);
+  }, [
+    bgColor,
+    clientSize,
+    direction,
+    onScroll,
+    scrollFrom,
+    thumbClass,
+    thumbStyle,
+    trickerClass,
+    trickerStyle,
+  ]);
 
   useEffect(() => {
     scrollbarIns.current?.updateClientSize(clientSize);

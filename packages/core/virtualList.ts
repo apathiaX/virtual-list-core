@@ -154,29 +154,29 @@ export class BaseVirtualList<T extends Record<string, any>> {
     return this._state.offset > 0 ? this._state.offset : 0;
   }
 
-  _fixDynamicOffset(targetId: string, changeItemSize: number, preSize: number) {
-    const changeItemIndex = this._list.findIndex(
-      (item) => item.id === targetId,
-    );
-    if (changeItemIndex === -1 || changeItemIndex < this._state.renderBegin)
-      return;
-    let preOffset = 0;
-    for (let i = this._state.renderBegin; i < changeItemIndex; i++) {
-      preOffset += this._getItemSize(this._list[i]?.[this._itemKey]);
-    }
-    if (Math.abs(this._state.transformDistance) > preOffset) {
-      this._scroll(changeItemSize, false);
-    } else {
-    }
-    // preOffset += preSize;
-    // console.warn('xzc', 'fixed', 'third-', preOffset);
-    // const realTransformDistance =
-    //   preOffset - Math.abs(this._state.transformDistance);
-    // if (preOffset - realTransformDistance > 0) {
-    //   console.warn('xzc', 'fixed', 'fifth-');
-    //   this._scroll(changeItemSize, false);
-    // }
-  }
+  // _fixDynamicOffset(targetId: string, changeItemSize: number, preSize: number) {
+  //   const changeItemIndex = this._list.findIndex(
+  //     (item) => item.id === targetId,
+  //   );
+  //   if (changeItemIndex === -1 || changeItemIndex < this._state.renderBegin)
+  //     return;
+  //   let preOffset = 0;
+  //   for (let i = this._state.renderBegin; i < changeItemIndex; i++) {
+  //     preOffset += this._getItemSize(this._list[i]?.[this._itemKey]);
+  //   }
+  //   if (Math.abs(this._state.transformDistance) > preOffset) {
+  //     this._scroll(changeItemSize, false);
+  //   } else {
+  //   }
+  // preOffset += preSize;
+  // console.warn('xzc', 'fixed', 'third-', preOffset);
+  // const realTransformDistance =
+  //   preOffset - Math.abs(this._state.transformDistance);
+  // if (preOffset - realTransformDistance > 0) {
+  //   console.warn('xzc', 'fixed', 'fifth-');
+  //   this._scroll(changeItemSize, false);
+  // }
+  // }
 
   _createObserver() {
     if (typeof ResizeObserver === 'undefined') {
