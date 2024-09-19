@@ -1,7 +1,7 @@
 {
-  "name": "vanilla",
+  "name": "playground-vanilla",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -13,6 +13,6 @@
     "vite": "^5.4.0"
   },
   "dependencies": {
-    "virtual-list-apathia": "workspace:^"
+    "virtual-list-vanilla": "workspace:^"
   }
 }

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from 'react';
 import './App.css';
 import { VirtualList } from 'virtual-list-react';

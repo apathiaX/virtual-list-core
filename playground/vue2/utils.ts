@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 type Item = { index: number; id: string; text: string };
-export function getList(length: number, start = 0): Item[] {
+export function getList(length: number): Item[] {
   const newList: Item[] = [];
   for (let i = 0; i < length; i++) {
     newList.push({
@@ -14,7 +14,7 @@ export function getList(length: number, start = 0): Item[] {
 }
 
 type PersonItem = { index: number; id: string; avatar: string; name: string };
-export function getAvatarList(length: number, start = 0): PersonItem[] {
+export function getAvatarList(length: number): PersonItem[] {
   const newList: PersonItem[] = [];
   for (let i = 0; i < length; i++) {
     newList.push({

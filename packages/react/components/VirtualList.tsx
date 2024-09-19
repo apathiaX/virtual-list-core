@@ -17,16 +17,17 @@ export const ObserverItem = (props: IObserverItemProps) => {
   const observerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (observerRef.current) {
-      resizeObserver?.observe(observerRef.current);
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      resizeObserver?.observe(currentObserverRef);
     }
 
     return () => {
-      if (observerRef.current) {
-        resizeObserver?.unobserve(observerRef.current);
+      if (currentObserverRef) {
+        resizeObserver?.unobserve(currentObserverRef);
       }
     };
-  }, []);
+  }, [resizeObserver]);
 
   return (
     <div ref={observerRef} data-id={id}>

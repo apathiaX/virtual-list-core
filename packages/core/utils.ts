@@ -92,11 +92,11 @@ export function handleScroll(
       return;
     }
 
-    let moveEndX = evt.touches[0].pageX;
-    let moveEndY = evt.touches[0].pageY;
+    const moveEndX = evt.touches[0].pageX;
+    const moveEndY = evt.touches[0].pageY;
 
-    let diffX = moveEndX - startX;
-    let diffY = moveEndY - startY;
+    const diffX = moveEndX - startX;
+    const diffY = moveEndY - startY;
 
     return {
       deltaX: -diffX,
@@ -211,7 +211,7 @@ export function applyStyles(
   styles: Partial<CSSStyleDeclaration>,
 ) {
   for (const property in styles) {
-    if (styles.hasOwnProperty(property)) {
+    if (Object.prototype.hasOwnProperty.call(styles, property)) {
       element.style[property] = styles[property]!;
     }
   }

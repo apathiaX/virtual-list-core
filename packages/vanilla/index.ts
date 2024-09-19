@@ -1,4 +1,4 @@
-import { VirtualList, VirtualListEvent } from 'virtual-list-core';
+import { BaseVirtualList, VirtualListEvent } from 'virtual-list-core';
 import { IVirtualListVanillaOptions } from './types';
 import { VirtualListNode } from './node';
 
@@ -6,7 +6,7 @@ export function createVirtualLst<T extends { id: string; text: string }>(
   options: IVirtualListVanillaOptions<T>,
   // callback:
 ) {
-  let virtualListIns: VirtualList<T> | null = null;
+  let virtualListIns: BaseVirtualList<T> | null = null;
   let virtualListNodeIns: VirtualListNode<T> | null = null;
 
   const createListClient = () => {
@@ -117,7 +117,7 @@ export function createVirtualLst<T extends { id: string; text: string }>(
   const onRenderChange = (
     renderRange: { renderBegin: number; renderEnd: number },
     renderList: T[],
-    el: HTMLElement | Element | null,
+    // el: HTMLElement | Element | null,
   ) => {
     virtualListNodeIns?.renderNode(renderList, renderRange);
   };
@@ -169,7 +169,7 @@ export function createVirtualLst<T extends { id: string; text: string }>(
     virtualListContainerEl.appendChild(virtualListClientEl);
 
     // 初始化虚拟列表实例
-    virtualListIns = new VirtualList(
+    virtualListIns = new BaseVirtualList(
       {
         ...options,
         clientEl: virtualListClientEl,
