@@ -59,5 +59,5 @@ export default [
         parser: tseslint.parser
       }
     }
-  }))
+  })),
 ];
