@@ -39,7 +39,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'react/react-in-jsx-scope': 'off', // 禁用 "React must be in scope" 规则
+      'react/react-in-jsx-scope': 'off',
     },
   },
   ...pluginVue.configs["flat/essential"].map(config => ({

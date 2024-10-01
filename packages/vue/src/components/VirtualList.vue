@@ -88,7 +88,7 @@ import { ScrollbarDirection } from 'virtual-list-core';
 import ObserverItem from './ObserverItem.vue';
 import Scrollbar from './Scrollbar.vue';
 import { useVirtualList } from '../hooks/useVirtualList';
-import { IVirtualListProps, VirtualListEmitEvents } from '../types';
+import type { IVirtualListProps, VirtualListEmitEvents } from '../types';
 
 const props = withDefaults(
   defineProps<IVirtualListProps<Record<string, any>>>(),

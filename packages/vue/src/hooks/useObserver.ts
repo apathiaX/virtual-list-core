@@ -1,5 +1,5 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { IObserverItemProps } from '../types';
+import type { IObserverItemProps } from '../types';
 
 export const useObserverItem = (props: IObserverItemProps) => {
   const itemRefEl = ref(null);

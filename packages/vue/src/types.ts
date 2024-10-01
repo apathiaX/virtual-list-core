@@ -1,4 +1,4 @@
-import { CSSProperties } from 'vue';
+import type { CSSProperties } from 'vue';
 import VirtualList from './components/VirtualList.vue';
 
 export interface IVirtualListProps<T extends Record<string, any>> {

@@ -6,7 +6,7 @@
         ref="stickyHeaderRefEl"
         :class="`virtual-list__sticky-header ${stickyHeaderClass}`"
         :style="stickyHeaderStyle"
-        data-id="stickyHeader"
+        :data-id="'stickyHeader'"
       >
         <slot name="stickyHeader"></slot>
       </div>
@@ -16,7 +16,7 @@
           ref="headerRefEl"
           :class="headerClass"
           :style="headerStyle"
-          data-id="header"
+          :data-id="'header'"
         >
           <slot name="header"></slot>
         </div>
@@ -37,7 +37,7 @@
           ref="footerRefEl"
           :class="footerClass"
           :style="footerStyle"
-          data-id="footer"
+          :data-id="'footer'"
         >
           <slot name="footer"></slot>
         </div>
@@ -47,7 +47,7 @@
         ref="stickyFooterRefEl"
         :class="`virtual-list__sticky-footer ${stickyFooterClass}`"
         :style="stickyFooterStyle"
-        data-id="stickyFooter"
+        :data-id="'stickyFooter'"
       >
         <slot name="stickyFooter"></slot>
       </div>
@@ -252,7 +252,7 @@ export default Vue.extend({
     renderBegin(): number {
       return this.$data.virtualListIns!.listState.renderBegin;
     },
-    resizeObserver(): Object {
+    resizeObserver(): ResizeObserver {
       return this.$data.virtualListIns?.resizeObserver;
     },
   },
@@ -331,7 +331,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style scoped>
 .virtual-list__client {
   width: 100%;
   height: 100%;

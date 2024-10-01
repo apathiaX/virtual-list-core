@@ -5,7 +5,8 @@
 </template>
 
 <script lang="ts">
-export default {
+import Vue from 'vue';
+export default Vue.extend({
   name: 'ObserverItem',
   props: {
     id: {
@@ -18,13 +19,13 @@ export default {
   },
   mounted() {
     if (this.resizeObserver && this.$refs.itemRefEl) {
-      this.resizeObserver.observe(this.$refs.itemRefEl);
+      this.resizeObserver.observe(this.$refs.itemRefEl as HTMLElement);
     }
   },
   beforeDestroy() {
     if (this.resizeObserver && this.$refs.itemRefEl) {
-      this.resizeObserver.unobserve(this.$refs.itemRefEl);
+      this.resizeObserver.unobserve(this.$refs.itemRefEl as HTMLElement);
     }
   },
-};
+});
 </script>

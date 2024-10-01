@@ -1,11 +1,12 @@
 {
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
   "compilerOptions": {
     "composite": true,
     "declaration": true,
-    "declarationDir": "dist/types",
+    "declarationDir": "../../dist/vue/dist/types",
     "noEmit": false,
     "emitDeclarationOnly": true,
-    "outDir": "dist",
+    "outDir": "../../dist/vue/dist",
 
     "module": "ESNext",
     "moduleResolution": "bundler",
@@ -15,8 +16,11 @@
     "verbatimModuleSyntax": true,
     "target": "ESNext",
     "useDefineForClassFields": true,
-    "noUnusedParameters": true,
 
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+
+    // Recommended
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
@@ -26,5 +30,9 @@
     "DOM",
     "DOM.Iterable"
   ],
-  "exclude": ["node_modules", "dist", "**/*/gulpfile.ts"]
+  "include": [
+   "src/**/*.vue", 
+   "src/**/*.ts"
+  ],
+  "exclude": ["node_modules", "dist"],
 }
