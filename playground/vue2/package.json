@@ -18,5 +18,12 @@
   "dependencies": {
     "virtual-list-vue2": "workspace:^",
     "vue-template-compiler": "^2.7.16"
+  },
+  "packageExtensions": {
+    "vue-template-compiler@2.7.16": {
+      "peerDependencies": {
+        "vue": "2.7.16"
+      }
+    }
   }
 }

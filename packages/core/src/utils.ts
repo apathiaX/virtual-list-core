@@ -1,4 +1,4 @@
-import { IVirtualListState } from './types';
+import type { IVirtualListState } from './types';
 
 export function getDefaultState(): IVirtualListState {
   return {

@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 import { BaseVirtualList, VirtualListEvent } from 'virtual-list-core';
-import { IVirtualListProps } from '../types';
+import type { IVirtualListProps } from '../types';
 
 export const useVirtualList = <T extends Record<string, any>>(
   props: IVirtualListProps<T>,

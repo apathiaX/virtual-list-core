@@ -2,13 +2,22 @@
   "name": "virtual-list-vue",
   "version": "0.0.1",
   "description": "virtual list used in vue",
-  "main": "index.ts",
-  "scripts": {},
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "start": "gulp --require @esbuild-kit/cjs-loader -f gulpfile.ts && vue-tsc"
+  },
   "keywords": [],
   "author": "apathiaX",
   "license": "ISC",
   "dependencies": {
     "virtual-list-core": "workspace:^",
     "vue": "^3.4.35"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vue/compiler-sfc": "^3.4.35",
+    "vite": "^5.4.8",
+    "vue-tsc": "^2.0.29"
   }
 }

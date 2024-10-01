@@ -1,19 +1,19 @@
 import {
   ref,
-  SetupContext,
   shallowReactive,
   shallowRef,
-  ShallowRef,
+  type SetupContext,
+  type ShallowRef,
   watch,
 } from 'vue';
 import {
   BaseVirtualList,
   VirtualListEvent,
-  IVirtualListChildrenSize,
+  type IVirtualListChildrenSize,
 } from 'virtual-list-core';
 import {
-  IVirtualListEmits,
-  IVirtualListProps,
+  type IVirtualListEmits,
+  type IVirtualListProps,
   VirtualListEmitEvents,
 } from '../types';
 

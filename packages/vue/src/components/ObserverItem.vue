@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import { IObserverItemProps } from '../types';
+import { type IObserverItemProps } from '../types';
 import { useObserverItem } from '../hooks/useObserver';
 const props = defineProps<IObserverItemProps>();
 

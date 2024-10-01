@@ -7,5 +7,5 @@
   "access": "public",
   "baseBranch": "feat/init",
   "updateInternalDependencies": "patch",
-  "ignore": ["playground-react", "playground-vanilla", "playground-vue", "playground-vue2"]
+  "ignore": ["playground-react", "playground-vanilla", "playground-vue", "playground-vue2", "internal-utils"]
 }

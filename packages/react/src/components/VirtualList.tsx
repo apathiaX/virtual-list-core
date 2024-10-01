@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useVirtualList } from '../hooks/useVirtualList';
-import { IObserverItemProps, IVirtualListProps } from '../types';
+import type { IObserverItemProps, IVirtualListProps } from '../types';
 import { VirtualScrollbar } from './Scrollbar';
 import '../styles/index.css';
 import { ScrollbarDirection } from 'virtual-list-core';

@@ -1,6 +1,6 @@
 import { Scrollbar, ScrollbarEvent } from 'virtual-list-core';
 import { useEffect, useRef } from 'react';
-import { IScrollbarProps } from '../types';
+import type { IScrollbarProps } from '../types';
 import '../styles/scrollbar.css';
 
 export const VirtualScrollbar = (props: IScrollbarProps) => {
