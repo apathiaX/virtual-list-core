@@ -3,20 +3,19 @@
 <a href="./README.md" target="_blank">English</a> |
 <a href="./README_CN.md" target="_blank">简体中文</a>
 
-## Document
+## 文档
 
-Please follow the documentation at
-[virtual-list-core](https://apathiaX.github.io/virtual-list-core/)!
+请查看文档 [virtual-list-core](https://apathiaX.github.io/virtual-list-core/)!
 
-## Advantages
+## 优势
 
-- Native JavaScript, compatible with React, Vue, and other frameworks
+- 原生js，支持react、vue 等多种框架
 
-- Supports rendering millions of data entries
+- 支持百万数据渲染
 
-- Smooth scrolling with no blank screen
+- 快速滚动无白屏
 
-## Usage
+## 用法
 
 - Core: [virtual-list-core](./packages/core/README.md)
 - Vue3: [virtual-list-vue](./packages/vue/README.md)

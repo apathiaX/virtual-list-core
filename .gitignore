@@ -13,6 +13,8 @@ dist
 dist-ssr
 *.local
 
+**/cache
+
 /cypress/videos/
 /cypress/screenshots/
 
