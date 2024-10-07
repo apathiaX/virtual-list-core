@@ -1,0 +1,15 @@
+{
+  "name": "virtual-list-docs",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "apathiaX",
+  "devDependencies": {
+    "vitepress": "^1.3.4"
+  }
+}
