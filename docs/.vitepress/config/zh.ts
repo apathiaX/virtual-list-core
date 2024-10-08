@@ -11,9 +11,9 @@ export const zh = defineConfig({
         link: '/zh/guide/feature',
         activeMatch: '/zh/guide/',
       },
-      { text: 'Vue', link: '/en/vue' },
-      { text: 'Vue2', link: '/en/vue2' },
-      { text: 'React', link: '/en/react' },
+      { text: 'Vue', link: '/zh/vue' },
+      { text: 'Vue2', link: '/zh/vue2' },
+      { text: 'React', link: '/zh/react' },
     ],
 
     sidebar: {

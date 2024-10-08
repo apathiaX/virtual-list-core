@@ -8,16 +8,16 @@ export const en = defineConfig({
     nav: [
       {
         text: 'Guide',
-        link: '/en/guide/feature',
-        activeMatch: '/en/guide/',
+        link: '/guide/feature',
+        activeMatch: '/guide/',
       },
-      { text: 'Vue', link: '/en/vue' },
-      { text: 'Vue2', link: '/en/vue2' },
-      { text: 'React', link: '/en/react' },
+      { text: 'Vue', link: '/vue' },
+      { text: 'Vue2', link: '/vue2' },
+      { text: 'React', link: '/react' },
     ],
 
     sidebar: {
-      '/guide/': { base: '/en/guide/', items: sidebarGuide() },
+      '/guide/': { base: '/guide/', items: sidebarGuide() },
     },
     footer: {
       message: 'Released under the MIT License.',

@@ -8,10 +8,10 @@ hero:
   actions:
     - theme: brand
       text: Guide
-      link: /guide/markdown-examples
+      link: /guide/feature
     - theme: alt
       text: Quick Start
-      link: /guide/api-examples
+      link: /guide/getting-started
     - theme: alt
       text: Github
       link: https://github.com/apathiaX/virtual-list

@@ -3,6 +3,8 @@ import { defineConfig } from 'vitepress';
 export const shared = defineConfig({
   title: 'virtual-list-core',
   lastUpdated: true,
+  cleanUrls: true,
+  metaChunk: true,
 
   rewrites: {
     'en/:rest*': ':rest*',
