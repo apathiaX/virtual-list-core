@@ -8,9 +8,6 @@ on:
 
 jobs:
   deploy:
-    strategy:
-      matrix:
-        node-version: [18]
     runs-on: ubuntu-latest
     steps:
       # 检出代码
