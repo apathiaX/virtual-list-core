@@ -1,9 +1,10 @@
-name: release
+name: Deploy Documents
 
 on:
   push:
     branches:
       - main
+      - feat/init
 
 jobs:
   deploy:
@@ -23,6 +24,9 @@ jobs:
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
+
+      - name: Build Docs
+        run: pnpm build:docs
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
