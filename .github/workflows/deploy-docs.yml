@@ -13,15 +13,21 @@ jobs:
         node-version: [18]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2.2.2
-        with:
-          version: 7
-      - name: Use Node.js ${{ matrix.node-version }}
+      # 检出代码
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      # 设置 Node.js 版本
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: '18'
+
+      # 安装 pnpm
+      - name: Install pnpm
+        run: |
+          npm install -g pnpm
+
       - name: Install dependencies
         run: pnpm install
 
