@@ -1,85 +1,80 @@
-# Markdown Extension Examples
+# 安装
 
-This page demonstrates some of the built-in markdown extensions provided by VitePress.
+::: code-group
 
-## Syntax Highlighting
-
-VitePress provides Syntax Highlighting powered by [Shiki](https://github.com/shikijs/shiki), with additional features like line-highlighting:
-
-**Input**
-
-````md
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
-```
-````
-
-**Output**
-
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
+```sh [npm]
+$ npm add virtual-list-core
 ```
 
-## Custom Containers
-
-**Input**
-
-```md
-::: info
-This is an info box.
-:::
-
-::: tip
-This is a tip.
-:::
-
-::: warning
-This is a warning.
-:::
-
-::: danger
-This is a dangerous warning.
-:::
-
-::: details
-This is a details block.
-:::
+```sh [pnpm]
+$ pnpm add virtual-list-core
 ```
 
-**Output**
+```sh [yarn]
+$ yarn add virtual-list-core
+```
 
-::: info
-This is an info box.
+```sh [bun]
+$ bun add virtual-list-core
+```
+
 :::
 
-::: tip
-This is a tip.
+# 虚拟列表组件结构
+
+`virtual-list-core` 采用虚拟滚动条的方式，在使用的时候需要按照特定的结构进行布局
+
+::: details 结构示意图
+<img src="/structure.png"/>
 :::
 
-::: warning
-This is a warning.
-:::
+``` html
+<div class="virtual-list__client">
+  <div class="list-body__container">
+    <div class="`virtual-list__sticky-header"></div>
+    <div class="virtual-list-body">
+      <div class="virtual-list-header"></div>
+      <div class="list-body__content"></div>
+      <div class="virtual-list-footer"></div>
+    </div>
+    <div class="virtual-list__sticky-footer"></div>
+  </div>
+  <div class="virtual-list-scrollbar"></div>
+</div>
+```
 
-::: danger
-This is a dangerous warning.
-:::
+# 简单使用
 
-::: details
-This is a details block.
-:::
+通过传入对应的配置项，即可新建一个虚拟列表类，同时会返回虚拟列表实例，可以获取列表的状态和对应的方法[API](./state.md)。可以在 `VirtualListEvent.UPDATE_RENDER_RANGE` 事件中获取需要渲染的元素的区间，再去渲染对应的元素。
 
-## More
+``` ts
+import { BaseVirtualList } from 'virtual-list-core'
 
-Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).
+const virtualListIns = new BaseVirtualList(
+  {
+    clientEl,
+    bodyEl,
+    list,
+    itemKey,
+    // ......
+  },
+  {
+    [VirtualListEvent.UPDATE_RENDER_RANGE]: onRenderRangeUpdate,
+    [VirtualListEvent.UPDATE_VIRTUAL_SIZE]: onVirtualSizeUpdate,
+    [VirtualListEvent.UPDATE_VIEW_RANGE]: onViewRangeUpdate,
+    [VirtualListEvent.UPDATE_ITEM_SIZE]: onItemSizeUpdate,
+    [VirtualListEvent.UPDATE_TRANSFORM_DISTANCE]: onTransformDistanceUpdate,
+    [VirtualListEvent.SCROLL]: onScroll,
+    [VirtualListEvent.SCROLL_TO_TOP]: onScrollToTop,
+    [VirtualListEvent.SCROLL_TO_BOTTOM]: onScrollToBottom,
+    [VirtualListEvent.RENDER_LIST_CHANGE]: onRenderChange,
+  },
+);
+
+const onRenderChange = (
+  renderRange: { renderBegin: number; renderEnd: number },
+  renderList: T[],
+) => {
+  renderNode(renderList, renderRange);
+};
+```

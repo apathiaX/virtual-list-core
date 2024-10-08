@@ -63,8 +63,9 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: 'API',
       collapsed: false,
       items: [
+        { text: '属性状态', link: 'state' },
         { text: '配置选项', link: 'options' },
-        { text: '属性方法', link: 'methods' },
+        { text: ' 回调事件', link: 'events' },
       ],
     },
   ];

@@ -40,8 +40,9 @@ function sidebarGuide(): DefaultTheme.SidebarItem[] {
       text: 'API',
       collapsed: false,
       items: [
+        { text: 'State', link: 'state' },
         { text: 'Options', link: 'options' },
-        { text: 'Methods', link: 'methods' },
+        { text: 'Events', link: 'events' },
       ],
     },
   ];

@@ -1,49 +1,13 @@
----
-outline: deep
----
+# Feature
 
-# Runtime API Examples
+## Million-level Data Rendering
+`virtual-list-core` overcomes the maximum DOM height limit of browsers and supports high-performance rendering of data at the scale of millions of entries.
 
-This page demonstrates usage of some of the runtime APIs provided by VitePress.
+<video controls>
+  <source src="/live.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
 
-The main `useData()` API can be used to access site, theme, and page data for the current page. It works in both `.md` and `.vue` files:
+## Multi-framework Compatibility
 
-```md
-<script setup>
-import { useData } from 'vitepress'
-
-const { theme, page, frontmatter } = useData()
-</script>
-
-## Results
-
-### Theme Data
-<pre>{{ theme }}</pre>
-
-### Page Data
-<pre>{{ page }}</pre>
-
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
-```
-
-<script setup>
-import { useData } from 'vitepress'
-
-const { site, theme, page, frontmatter } = useData()
-</script>
-
-## Results
-
-### Theme Data
-<pre>{{ theme }}</pre>
-
-### Page Data
-<pre>{{ page }}</pre>
-
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
-
-## More
-
-Check out the documentation for the [full list of runtime APIs](https://vitepress.dev/reference/runtime-api#usedata).
+`virtual-list-core` provides core virtual list functionality that can be quickly integrated into frameworks such as Vue, React, and others.

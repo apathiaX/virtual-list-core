@@ -1,85 +1,79 @@
-# Markdown Extension Examples
+# Install
+::: code-group
 
-This page demonstrates some of the built-in markdown extensions provided by VitePress.
-
-## Syntax Highlighting
-
-VitePress provides Syntax Highlighting powered by [Shiki](https://github.com/shikijs/shiki), with additional features like line-highlighting:
-
-**Input**
-
-````md
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
-```
-````
-
-**Output**
-
-```js{4}
-export default {
-  data () {
-    return {
-      msg: 'Highlighted!'
-    }
-  }
-}
+```sh [npm]
+$ npm add virtual-list-core
 ```
 
-## Custom Containers
-
-**Input**
-
-```md
-::: info
-This is an info box.
-:::
-
-::: tip
-This is a tip.
-:::
-
-::: warning
-This is a warning.
-:::
-
-::: danger
-This is a dangerous warning.
-:::
-
-::: details
-This is a details block.
-:::
+```sh [pnpm]
+$ pnpm add virtual-list-core
 ```
 
-**Output**
+```sh [yarn]
+$ yarn add virtual-list-core
+```
 
-::: info
-This is an info box.
+```sh [bun]
+$ bun add virtual-list-core
+```
+
 :::
 
-::: tip
-This is a tip.
+# Virtual List Structure
+
+`virtual-list-core` uses a virtual scroll mechanism, and when using it, you need to follow a specific layout structure.
+
+::: details Structure Image
+<img src="/structure.png"/>
 :::
 
-::: warning
-This is a warning.
-:::
+``` html
+<div class="virtual-list__client">
+  <div class="list-body__container">
+    <div class="`virtual-list__sticky-header"></div>
+    <div class="virtual-list-body">
+      <div class="virtual-list-header"></div>
+      <div class="list-body__content"></div>
+      <div class="virtual-list-footer"></div>
+    </div>
+    <div class="virtual-list__sticky-footer"></div>
+  </div>
+  <div class="virtual-list-scrollbar"></div>
+</div>
+```
 
-::: danger
-This is a dangerous warning.
-:::
+# Simple Usage
 
-::: details
-This is a details block.
-:::
+By passing in the corresponding configuration options, you can create a new virtual list class, and a virtual list instance will be returned. This instance provides access to the list’s state and corresponding methods [API](./state.md). You can obtain the range of elements that need to be rendered in the `VirtualListEvent.UPDATE_RENDER_RANGE` event, and then render the corresponding elements.
 
-## More
+``` ts
+import { BaseVirtualList } from 'virtual-list-core'
 
-Check out the documentation for the [full list of markdown extensions](https://vitepress.dev/guide/markdown).
+const virtualListIns = new BaseVirtualList(
+  {
+    clientEl,
+    bodyEl,
+    list,
+    itemKey,
+    // ......
+  },
+  {
+    [VirtualListEvent.UPDATE_RENDER_RANGE]: onRenderRangeUpdate,
+    [VirtualListEvent.UPDATE_VIRTUAL_SIZE]: onVirtualSizeUpdate,
+    [VirtualListEvent.UPDATE_VIEW_RANGE]: onViewRangeUpdate,
+    [VirtualListEvent.UPDATE_ITEM_SIZE]: onItemSizeUpdate,
+    [VirtualListEvent.UPDATE_TRANSFORM_DISTANCE]: onTransformDistanceUpdate,
+    [VirtualListEvent.SCROLL]: onScroll,
+    [VirtualListEvent.SCROLL_TO_TOP]: onScrollToTop,
+    [VirtualListEvent.SCROLL_TO_BOTTOM]: onScrollToBottom,
+    [VirtualListEvent.RENDER_LIST_CHANGE]: onRenderChange,
+  },
+);
+
+const onRenderChange = (
+  renderRange: { renderBegin: number; renderEnd: number },
+  renderList: T[],
+) => {
+  renderNode(renderList, renderRange);
+};
+```

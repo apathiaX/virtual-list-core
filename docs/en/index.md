@@ -17,10 +17,10 @@ hero:
       link: https://github.com/apathiaX/virtual-list
 
 features:
-  - title: Feature A
-    details: Support Vanilla、 Vue2、 Vue3、 React
-  - title: Feature B
+  - title: Million-level Data Rendering
+    details: Supports high-performance rendering of data at the scale of millions of entries
+  - title: Multi-framework Compatibility
     details: Offering exceptional performance optimization and scalability
-  - title: Feature C
-    details: Millions Data Render
+  - title: High Performance
+    details: Efficient element search algorithm
 ---

@@ -1,49 +1,21 @@
----
-outline: deep
----
+# 特性
 
-# Runtime API Examples
+## 百万级数据渲染
+`virtual-list-core` 突破浏览器 DOM 的最大高度限制，支持百万级数据的高性能渲染
 
-This page demonstrates usage of some of the runtime APIs provided by VitePress.
+<video controls>
+  <source src="/live.mp4" type="video/mp4">
+  当前浏览器不支持 video 标签
+</video>
 
-The main `useData()` API can be used to access site, theme, and page data for the current page. It works in both `.md` and `.vue` files:
+## 多框架适配
 
-```md
-<script setup>
-import { useData } from 'vitepress'
+`virtual-list-core` 提供虚拟列表核心功能，可以在 vue、react 等框架进行快速接入
 
-const { theme, page, frontmatter } = useData()
-</script>
+同时提供基于 `virtual-list-core`封装的 Vue2、Vue3 以及 React 版本的虚拟组件
 
-## Results
+- Vue3:  [virtual-list-vue](../vue/index.md)
+- Vue2:  [virtual-list-vue2](../vue2/index.md)
+- React:  [virtual-list-react](../react/index.md)
 
-### Theme Data
-<pre>{{ theme }}</pre>
-
-### Page Data
-<pre>{{ page }}</pre>
-
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
-```
-
-<script setup>
-import { useData } from 'vitepress'
-
-const { site, theme, page, frontmatter } = useData()
-</script>
-
-## Results
-
-### Theme Data
-<pre>{{ theme }}</pre>
-
-### Page Data
-<pre>{{ page }}</pre>
-
-### Page Frontmatter
-<pre>{{ frontmatter }}</pre>
-
-## More
-
-Check out the documentation for the [full list of runtime APIs](https://vitepress.dev/reference/runtime-api#usedata).
+## 高性能
