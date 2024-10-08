@@ -5,6 +5,7 @@ export const shared = defineConfig({
   lastUpdated: true,
   cleanUrls: true,
   metaChunk: true,
+  base: '/virtual-list-core/',
 
   rewrites: {
     'en/:rest*': ':rest*',
@@ -12,7 +13,7 @@ export const shared = defineConfig({
 
   themeConfig: {
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/apathiaX/virtual-list' },
+      { icon: 'github', link: 'https://github.com/apathiaX/virtual-list-core' },
     ],
   },
 });
