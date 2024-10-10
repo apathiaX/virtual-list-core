@@ -12,6 +12,7 @@ export const shared = defineConfig({
   },
 
   themeConfig: {
+    // logo: { src: '/logo.svg', width: 24, height: 24 },
     socialLinks: [
       { icon: 'github', link: 'https://github.com/apathiaX/virtual-list-core' },
     ],

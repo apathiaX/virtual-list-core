@@ -1,6 +1,6 @@
 export interface IVirtualListOptions<T> {
-  clientEl?: HTMLElement;
-  bodyEl?: HTMLElement;
+  clientEl: HTMLElement;
+  bodyEl: HTMLElement;
 
   list: T[];
   itemKey: string;

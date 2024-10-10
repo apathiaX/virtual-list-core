@@ -17,10 +17,10 @@ hero:
       link: https://github.com/apathiaX/virtual-list
 
 features:
-  - title: 特征 A
-    details: Support Vanilla、 Vue2、 Vue3、 React
-  - title: 特征 B
-    details: Offering exceptional performance optimization and scalability
-  - title: 特征 C
-    details: Millions Data Render
+  - title: 百万级数据渲染
+    details: 支持百万级数据的高性能渲染
+  - title: 多框架适配
+    details: 提供虚拟列表核心功能，可以在 vue、react 等框架进行快速接入
+  - title: 高性能
+    details: 高效元素查找算法
 ---

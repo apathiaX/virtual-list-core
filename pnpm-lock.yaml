@@ -2692,9 +2692,9 @@ packages:
         optional: true
     dependencies:
       '@volar/language-core': 2.4.5
-      '@vue/compiler-dom': 3.5.8
+      '@vue/compiler-dom': 3.5.10
       '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.8
+      '@vue/shared': 3.5.10
       computeds: 0.0.1
       minimatch: 9.0.5
       muggle-string: 0.4.1
@@ -2711,9 +2711,9 @@ packages:
         optional: true
     dependencies:
       '@volar/language-core': 2.4.5
-      '@vue/compiler-dom': 3.5.8
+      '@vue/compiler-dom': 3.5.10
       '@vue/compiler-vue2': 2.7.16
-      '@vue/shared': 3.5.8
+      '@vue/shared': 3.5.10
       computeds: 0.0.1
       minimatch: 9.0.5
       muggle-string: 0.4.1
