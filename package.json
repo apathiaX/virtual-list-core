@@ -22,7 +22,14 @@
     "prepare": "husky",
     "clear": "rimraf dist"
   },
-  "keywords": ["virtual list", "react", "vue", "vue2", "vanilla", "billion data"],
+  "keywords": [
+    "virtual list",
+    "react",
+    "vue",
+    "vue2",
+    "vanilla",
+    "billion data"
+  ],
   "author": "apathiaX",
   "license": "ISC",
   "devDependencies": {
@@ -55,7 +62,9 @@
     "tsconfig.dom.json": "link:@vue/tsconfig/tsconfig.dom.json",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.8"
+    "vite": "^5.4.8",
+    "vitest": "^2.1.2",
+    "happy-dom": "^15.7.4"
   },
   "husky": {
     "hooks": {
