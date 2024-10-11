@@ -1,5 +1,5 @@
 import { BaseVirtualList, VirtualListEvent } from 'virtual-list-core';
-import { IVirtualListVanillaOptions } from './types';
+import type { IVirtualListVanillaOptions } from './types';
 import { VirtualListNode } from './node';
 
 export function createVirtualLst<T extends { id: string; text: string }>(

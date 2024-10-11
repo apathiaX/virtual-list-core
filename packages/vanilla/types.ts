@@ -1,4 +1,4 @@
-import { IVirtualListOptions } from 'virtual-list-core';
+import type { IVirtualListOptions } from 'virtual-list-core';
 
 export interface IVirtualListVanillaOptions<T> extends IVirtualListOptions<T> {
   containerClass?: string;
