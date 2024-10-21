@@ -1,6 +1,7 @@
 import { resolve } from 'path';
 import { build, type UserConfig } from 'vite';
 import { buildOutput, pkgRoot } from './path';
+import { formatPkgName } from './pkg';
 
 const getConfig = (
   module: string,
@@ -11,7 +12,7 @@ const getConfig = (
     build: {
       lib: {
         entry: resolve(pkgRoot, `${module}/src/index.ts`),
-        name: `virtual-list-${module}`,
+        name: formatPkgName(module),
       },
       rollupOptions: {
         external: ['vue', 'react'],

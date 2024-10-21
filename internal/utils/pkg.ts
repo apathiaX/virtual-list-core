@@ -2,7 +2,7 @@ import { createRequire } from 'module';
 import { join, resolve } from 'path';
 import { readFile, writeFile } from 'fs/promises';
 import { pkgRoot, projRoot } from './path';
-import { BASE_PACKAGE_CONFIG } from '../constant';
+import { BASE_PACKAGE_CONFIG, MODULE_PREFIX } from '../constant';
 
 const _require = createRequire(import.meta.url);
 
@@ -105,4 +105,8 @@ export const generatePkgJson = async (module: string) => {
     JSON.stringify(outputJsonObj, null, 2),
     'utf-8',
   );
+};
+
+export const formatPkgName = (module: string) => {
+  return module === 'core' ? MODULE_PREFIX : `@${MODULE_PREFIX}/${module}`;
 };

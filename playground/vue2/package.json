@@ -16,7 +16,7 @@
     "vue": "^2.7.16"
   },
   "dependencies": {
-    "virtual-list-vue2": "workspace:^",
+    "@virtual-list-core/vue2": "workspace:^",
     "vue-template-compiler": "^2.7.16"
   },
   "packageExtensions": {

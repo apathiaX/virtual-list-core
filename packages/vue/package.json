@@ -1,5 +1,5 @@
 {
-  "name": "virtual-list-vue",
+  "name": "@virtual-list-core/vue",
   "version": "0.0.1",
   "description": "virtual list used in vue",
   "type": "module",

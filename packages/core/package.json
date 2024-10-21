@@ -1,6 +1,6 @@
 {
   "name": "virtual-list-core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "virtual list",
   "type": "module",
   "main": "src/index.ts",

@@ -1,6 +1,6 @@
 export const PKG_NAME = 'dist';
 
-export const MODULE_PREFIX = 'virtual-list';
+export const MODULE_PREFIX = 'virtual-list-core';
 
 export const PACKAGES = ['core', 'vue', 'react', 'vue2'] as const;
 
