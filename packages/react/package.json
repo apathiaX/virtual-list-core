@@ -1,5 +1,5 @@
 {
-  "name": "virtual-list-react",
+  "name": "@virtual-list-core/react",
   "version": "0.0.1",
   "description": "virtual list used in react",
   "type": "module",

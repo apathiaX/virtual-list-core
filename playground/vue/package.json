@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "virtual-list-vue": "workspace:^",
+    "@virtual-list-core/vue": "workspace:^",
     "vue": "^3.4.35"
   },
   "devDependencies": {

@@ -3,21 +3,17 @@ import { rm } from 'fs/promises';
 import consola from 'consola';
 import prompts from 'prompts';
 import { buildOutput, projRoot } from '../utils';
-import { generatePkgJson } from '../utils/pkg';
+import { formatPkgName, generatePkgJson } from '../utils/pkg';
 import { copyLicenseFile, copyReadmeFile } from '../utils/copyFile';
-import { MODULE_PREFIX, PACKAGES } from '../constant';
+import { PACKAGES } from '../constant';
 import { resolve } from 'path';
 
 export const buildModuleBundle = async (module: string) => {
   consola.start(`Building virtual-list-${module}...`);
-  await execa(
-    'pnpm',
-    ['--filter', `${MODULE_PREFIX}-${module}`, 'run', 'start'],
-    {
-      stdio: 'pipe',
-      cwd: projRoot,
-    },
-  );
+  await execa('pnpm', ['--filter', formatPkgName(module), 'run', 'start'], {
+    stdio: 'pipe',
+    cwd: projRoot,
+  });
   await generatePkgJson(module);
   await copyLicenseFile(module);
   await copyReadmeFile(module);
@@ -43,7 +39,7 @@ export const selectOptions = async () => {
       name: 'module',
       message: 'Select Module',
       choices: PACKAGES.map((p) => ({
-        title: `${MODULE_PREFIX}-${p}`,
+        title: formatPkgName(p),
         value: p,
       })),
       initial: 1,
@@ -55,7 +51,7 @@ export const selectOptions = async () => {
 
 const releaseBundle = async (module: string) => {
   consola.start(`Release virtual-list-${module}...`);
-  await execa('npm', ['publish'], {
+  await execa('npm', ['publish', '--access=public'], {
     stdio: 'pipe',
     cwd: resolve(buildOutput, `${module}`),
   });
