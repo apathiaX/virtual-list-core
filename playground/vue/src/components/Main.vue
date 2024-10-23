@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { VirtualList, VirtualListIns } from 'virtual-list-vue';
+import { VirtualList, VirtualListIns } from '@virtual-list-core/vue';
 import { getList } from '../utils';
 import Item from './Item.vue';
 import Operate from './OperateGroup.vue';

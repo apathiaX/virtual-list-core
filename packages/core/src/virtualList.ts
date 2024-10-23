@@ -31,12 +31,14 @@ export class BaseVirtualList<T extends Record<string, any>> {
   private _list: T[] = [];
   private _renderList: T[] = [];
   private _sizeMap: Map<string, number> = new Map();
+  private _indexMap: Record<string, number> = {};
   private _resizeObserver: ResizeObserver | undefined = undefined;
   private _observerItemList: HTMLElement[] = [];
   private _emitEvents: IVirtualListCallBack<T> = {};
   private _fixOffsetMethod: null | GenericFunction = null;
   private _detachEventsFn: GenericFunction | undefined = undefined;
   private _state: IVirtualListState = getDefaultState();
+  private _preState: IVirtualListState = getDefaultState();
   private _childrenSize: IVirtualListChildrenSize = {
     clientSize: 0,
     headerSize: 0,
@@ -64,11 +66,11 @@ export class BaseVirtualList<T extends Record<string, any>> {
   _initElement(options: IVirtualListOptions<T>) {
     const { clientEl, bodyEl } = options;
     if (!clientEl) {
-      console.error('[Virtual List] ', 'clientEl are required');
+      console.error('[Virtual List Core] ', 'clientEl are required');
       return;
     }
     if (!bodyEl) {
-      console.error('[Virtual List] ', 'bodyEl are required');
+      console.error('[Virtual List Core] ', 'bodyEl are required');
       return;
     }
     this._clientEl = clientEl;
@@ -97,6 +99,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
     this._renderControl = options.renderControl;
     this._resizeObserver = this._createObserver();
     this._calcListTotalSize();
+    this._setItemIndex(options.list);
   }
 
   _init(options: IVirtualListOptions<T>) {
@@ -123,9 +126,11 @@ export class BaseVirtualList<T extends Record<string, any>> {
     this._sizeMap.delete(id);
   }
 
-  // _getItemAlreadyRendered(id: string) {
-  //   return this._sizeMap.has(id);
-  // }
+  _setItemIndex(list: T[]) {
+    for (let i = 0; i < list.length; i += 1) {
+      this._indexMap[list[i][this._itemKey]] = i;
+    }
+  }
 
   _getItemPosByIndex(index: number) {
     if (this._fixed) {
@@ -154,40 +159,53 @@ export class BaseVirtualList<T extends Record<string, any>> {
     return this._state.offset > 0 ? this._state.offset : 0;
   }
 
-  // _fixDynamicOffset(targetId: string, changeItemSize: number, preSize: number) {
-  //   const changeItemIndex = this._list.findIndex(
-  //     (item) => item.id === targetId,
-  //   );
-  //   if (changeItemIndex === -1 || changeItemIndex < this._state.renderBegin)
-  //     return;
-  //   let preOffset = 0;
-  //   for (let i = this._state.renderBegin; i < changeItemIndex; i++) {
-  //     preOffset += this._getItemSize(this._list[i]?.[this._itemKey]);
-  //   }
-  //   if (Math.abs(this._state.transformDistance) > preOffset) {
-  //     this._scroll(changeItemSize, false);
-  //   } else {
-  //   }
-  // preOffset += preSize;
-  // console.warn('xzc', 'fixed', 'third-', preOffset);
-  // const realTransformDistance =
-  //   preOffset - Math.abs(this._state.transformDistance);
-  // if (preOffset - realTransformDistance > 0) {
-  //   console.warn('xzc', 'fixed', 'fifth-');
-  //   this._scroll(changeItemSize, false);
-  // }
-  // }
+  _getItemIndexById(id: string) {
+    if (this._indexMap[id]) return this._indexMap[id];
+
+    let itemIndex = -1;
+    for (let i = 0; i < this._list.length; i++) {
+      if (this._list[i]?.[this._itemKey] === id) {
+        itemIndex = i;
+        break;
+      }
+    }
+    return itemIndex;
+  }
+
+  _fixChangedOffset(ids: string[]) {
+    for (let i = 0; i < ids.length; i++) {
+      const targetIndex = this._getItemIndexById(ids[i]);
+      if (targetIndex < this._preState.inViewBegin) {
+        return true;
+      }
+    }
+
+    return false;
+
+    // const idsSet = new Set(ids);
+    // for (let i = 0; i < this._list.length; i++) {
+    //   if (idsSet.size === 0) return false;
+    //   if (!idsSet.has(this._list[i]?.[this._itemKey])) continue;
+    //   // once id is less than renderBegin, it needs to be fixed
+    //   if (
+    //     idsSet.has(this._list[i]?.[this._itemKey]) &&
+    //     i < this._preState.inViewBegin
+    //   ) {
+    //     return true;
+    //   }
+    //   idsSet.delete(this._list[i]?.[this._itemKey]);
+    // }
+    // return false;
+  }
 
   _createObserver() {
     if (typeof ResizeObserver === 'undefined') {
-      console.error('[Virtual List] ', 'ResizeObserver is not supported');
+      console.error('[Virtual List Core] ', 'ResizeObserver is not supported');
       return;
     }
     return new ResizeObserver((entries) => {
       let diff = 0;
-      // let existItemDiff = 0;
-      // let preSize = 0;
-      // let targetId = '';
+      const ids = [];
       for (const entry of entries) {
         const id = (entry.target as HTMLElement).dataset.id;
         if (id) {
@@ -225,11 +243,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
           } else if (oldSize !== newSize) {
             this._setItemSize(id, newSize);
             diff += newSize - oldSize;
-            // if (isExist) {
-            //   targetId = id;
-            //   preSize = oldSize;
-            //   existItemDiff += newSize - oldSize;
-            // }
+            ids.push(id);
             this._emitEvents[VirtualListEvent.UPDATE_ITEM_SIZE]?.(id, newSize);
           }
           this._emitEvents[VirtualListEvent.SIZE_CHANGE]?.(this._childrenSize);
@@ -241,28 +255,32 @@ export class BaseVirtualList<T extends Record<string, any>> {
         this._fixOffsetMethod();
       }
 
-      // if (existItemDiff !== 0) {
-      //   // console.warn(
-      //   //   'xzc',
-      //   //   'fixed',
-      //   //   'first-',
-      //   //   targetId,
-      //   //   existItemDiff,
-      //   //   preSize,
-      //   // );
-      //   // this._fixDynamicOffset(targetId, existItemDiff, preSize);
-      //   // this._scroll(existItemDiff, false);
-      //   // this.scrollToOffset(this._state.offset);
-      // } else
+      if (ids.length === 0) return;
+
       if (
-        (this._fixOffset || this._forceFixOffset) &&
-        diff !== 0 &&
+        (this._fixChangedOffset(ids) || this._forceFixOffset) &&
         !this._abortFixOffset
       ) {
-        this._fixOffset = false;
-        this._forceFixOffset = false;
         this._scroll(diff, false);
       }
+
+      // if (
+      //   (this._fixOffset || this._forceFixOffset) &&
+      //   diff !== 0 &&
+      //   !this._abortFixOffset
+      // ) {
+      //   // console.warn(
+      //   //   'xzc',
+      //   //   diff,
+      //   //   'fix',
+      //   //   this._fixOffset,
+      //   //   'force fix',
+      //   //   this._forceFixOffset,
+      //   // );
+      //   // this._fixOffset = false;
+      //   // this._forceFixOffset = false;
+      //   // this._scroll(diff, false);
+      // }
       this._abortFixOffset = false;
     });
   }
@@ -475,6 +493,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
     this._state.renderBegin = newRenderBegin;
     this._state.renderEnd = newRenderEnd;
     if (newRenderBegin >= oldRenderBegin) {
+      this._fixOffset = false;
       this._state.virtualSize += this._getRangeSize(
         newRenderBegin,
         oldRenderBegin,
@@ -496,6 +515,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
   }
 
   _updateRange(start: number) {
+    this._preState.inViewBegin = this._state.inViewBegin;
     this._state.inViewBegin = start;
     this._state.inViewEnd = Math.min(
       start + this._state.views,
@@ -657,7 +677,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
 
   observerEl(el: HTMLElement) {
     if (!el) {
-      console.error('[Virtual List] ', 'observer el is required');
+      console.error('[Virtual List Core] ', 'observer el is required');
       return;
     }
     if (!this._observerItemList.includes(el) && this._resizeObserver) {
@@ -668,7 +688,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
 
   unObserverEl(el: HTMLElement) {
     if (!el) {
-      console.error('[Virtual List] ', 'observer el is required');
+      console.error('[Virtual List Core] ', 'observer el is required');
       return;
     }
     if (this._observerItemList.includes(el) && this._resizeObserver) {

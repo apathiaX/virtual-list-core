@@ -32,7 +32,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { VirtualListIns } from 'virtual-list-vue';
+import { VirtualListIns } from '@virtual-list-core/vue';
 import { ref } from 'vue';
 
 const props = defineProps<{
