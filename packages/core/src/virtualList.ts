@@ -388,6 +388,17 @@ export class BaseVirtualList<T extends Record<string, any>> {
       Math.ceil(this._childrenSize.clientSize / this._minSize) + 1;
   }
 
+  _calcInViewEnd(start: number) {
+    let size = 0;
+    for (let i = start; i < this._list.length; i++) {
+      size += this._getItemSize(this._list[i][this._itemKey]);
+      if (size >= this._childrenSize.clientSize) {
+        return i;
+      }
+    }
+    return start;
+  }
+
   _getSlotSize() {
     return (
       this._childrenSize.headerSize +
@@ -521,6 +532,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
       start + this._state.views,
       this._list.length - 1,
     );
+    console.warn('xzc', this._calcInViewEnd(start));
     this._calcRenderRange();
   }
 
