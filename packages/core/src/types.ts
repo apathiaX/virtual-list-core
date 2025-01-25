@@ -14,6 +14,8 @@ export interface IVirtualListOptions<T> {
     begin: number,
     end: number,
   ) => { begin: number; end: number };
+
+  virtualScrollbar?: boolean;
 }
 
 export interface IVirtualListState {

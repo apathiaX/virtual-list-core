@@ -3,25 +3,25 @@
     <Operate :virtListRef="virtListRef" :length="list.length"></Operate>
     <div class="demo-editable">
       <VirtualList ref="virtListRef" :list="list" itemKey="id" :minSize="20">
-        <template #stickyHeader>
+        <!-- <template #stickyHeader>
           <div style="background-color: bisque; color: red">stickyHeader</div>
-        </template>
-        <template #header>
+        </template> -->
+        <!-- <template #header>
           <div style="background-color: rgb(15, 116, 210); color: red">
             header
           </div>
-        </template>
+        </template> -->
         <template #default="{ data, index }">
           <Item :itemData="data" :index="index" />
         </template>
-        <template #stickyFooter>
+        <!-- <template #stickyFooter>
           <div style="background-color: bisque; color: red">stickyFooter</div>
-        </template>
-        <template #footer>
+        </template> -->
+        <!-- <template #footer>
           <div style="background-color: rgb(11, 152, 72); color: red">
             footer
           </div>
-        </template>
+        </template> -->
       </VirtualList>
     </div>
   </div>

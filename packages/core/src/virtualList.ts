@@ -389,7 +389,13 @@ export class BaseVirtualList<T extends Record<string, any>> {
   }
 
   _calcInViewEnd(start: number) {
-    let size = 0;
+    // preOffset = Match.abs(transformDistance) - Sum(inViewBegin, renderBegin)
+    //  Sum(inViewBegin, n) -  preOffset >= clientSize
+    let preOffset = 0;
+    for (let i = this._state.renderBegin; i < start; i += 1) {
+      preOffset += this._getItemSize(this._list[i][this._itemKey]);
+    }
+    let size = Math.abs(this._state.transformDistance) - preOffset;
     for (let i = start; i < this._list.length; i++) {
       size += this._getItemSize(this._list[i][this._itemKey]);
       if (size >= this._childrenSize.clientSize) {
@@ -399,7 +405,7 @@ export class BaseVirtualList<T extends Record<string, any>> {
     return start;
   }
 
-  _getSlotSize() {
+  _getChildrenSize() {
     return (
       this._childrenSize.headerSize +
       this._childrenSize.footerSize +
@@ -420,7 +426,9 @@ export class BaseVirtualList<T extends Record<string, any>> {
       targetDirection === ScrollDirection.BACKWARD &&
       Math.round(offset + scrollDistance) >=
         Math.round(
-          listTotalSize + this._getSlotSize() - this._childrenSize.clientSize,
+          listTotalSize +
+            this._getChildrenSize() -
+            this._childrenSize.clientSize,
         )
     ) {
       this._emitEvents[VirtualListEvent.SCROLL_TO_BOTTOM]?.(
@@ -535,6 +543,14 @@ export class BaseVirtualList<T extends Record<string, any>> {
     console.warn('xzc', this._calcInViewEnd(start));
     this._calcRenderRange();
   }
+
+  /** ------------------------ real scrollbar private methods - start --------------------- */
+
+  /** ------------------------ real scrollbar private methods - end --------------------- */
+
+  /** ------------------------  virtual scrollbar private methods - start --------------------- */
+
+  /** ------------------------  virtual scrollbar private methods - end --------------------- */
 
   /**------------------------  public methods - start --------------------- */
   scrollToOffset(targetOffset: number) {
